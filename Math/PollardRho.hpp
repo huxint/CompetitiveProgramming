@@ -12,7 +12,7 @@ namespace PollardRho {
     static constexpr std::size_t M = 512;
 
     namespace gcd_impl {
-        constexpr auto gcd_stein_impl(std::unsigned_integral auto x, std::unsigned_integral auto y) -> decltype(auto) {
+        constexpr auto gcd_stein_impl(std::unsigned_integral auto x, std::unsigned_integral auto y) {
             if (x == y) {
                 return x;
             }
@@ -24,7 +24,7 @@ namespace PollardRho {
             return gcd_stein_impl(s >> n, t);
         }
 
-        constexpr auto gcd_stein(std::unsigned_integral auto x, std::unsigned_integral auto y) -> decltype(auto) {
+        constexpr auto gcd_stein(std::unsigned_integral auto x, std::unsigned_integral auto y) {
             if (x == 0 or y == 0) {
                 return x | y;
             }
@@ -35,7 +35,7 @@ namespace PollardRho {
     }
 
     template <std::unsigned_integral size>
-    constexpr auto PollardRho(size value) -> size {
+    constexpr size PollardRho(size value) {
         if (~value & 1) {
             return 2;
         }
@@ -96,20 +96,20 @@ namespace PollardRho {
         return res;
     }
 
-    constexpr auto enumerate_prime_factors(std::unsigned_integral auto value, auto &&call) -> void {
+    constexpr void enumerate_prime_factors(std::unsigned_integral auto value, auto &&call) {
         if (value <= 1) {
             return;
         }
         if (MillerRabin(value)) {
-            call(value);
+            std::forward<decltype(call)>(call)(value);
             return;
         }
         auto factor{PollardRho(value)};
-        enumerate_prime_factors(factor, call);
-        enumerate_prime_factors(value / factor, call);
+        enumerate_prime_factors(factor, std::forward<decltype(call)>(call));
+        enumerate_prime_factors(value / factor, std::forward<decltype(call)>(call));
     }
 
-    constexpr auto factorize(std::unsigned_integral auto value) -> decltype(auto) {
+    constexpr auto factorize(std::unsigned_integral auto value) {
         std::vector<std::pair<decltype(value), u32>> res;
         if (~value & 1) {
             u32 bit_zero = std::countr_zero(value);
@@ -130,11 +130,11 @@ namespace PollardRho {
         return res;
     }
 
-    constexpr auto enumerate_factors(std::unsigned_integral auto value, auto &&call) -> void {
+    constexpr void enumerate_factors(std::unsigned_integral auto value, auto &&call) {
         auto factorizer = factorize(value);
         auto dfs = [&](auto &&self, u32 index, decltype(value) prod) -> void {
             if (index == factorizer.size()) {
-                call(prod);
+                std::forward<decltype(call)>(call)(prod);
                 return;
             }
             self(self, index + 1, prod);
@@ -145,7 +145,7 @@ namespace PollardRho {
         dfs(dfs, 0, 1);
     }
 
-    constexpr auto euler_phi(std::unsigned_integral auto value) -> decltype(value) {
+    constexpr auto euler_phi(std::unsigned_integral auto value) {
         for (const auto &[prime, _] : factorize(value)) {
             value = value / prime * (prime - 1);
         }
