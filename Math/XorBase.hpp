@@ -9,28 +9,28 @@ private:
     static constexpr auto digits = std::numeric_limits<T>::digits;
 
 public:
-    constexpr XorBase() {
+    XorBase() {
         basic.fill(0);
     }
 
-    constexpr XorBase(T value) : XorBase() {
+    XorBase(T value) : XorBase() {
         insert(value);
     }
 
-    constexpr XorBase(std::size_t n, auto &&mapping) : XorBase() {
+    XorBase(std::size_t n, auto &&mapping) : XorBase() {
         for (std::size_t i = 0; i != n; ++i) {
             insert(mapping(i));
         }
     }
 
     template <typename Iterator>
-    constexpr XorBase(Iterator first, Iterator last) : XorBase() {
+    XorBase(Iterator first, Iterator last) : XorBase() {
         for (; first != last; ++first) {
             insert(*first);
         }
     }
 
-    constexpr auto kth(std::size_t k, T base = 0) const -> T {
+    T kth(std::size_t k, T base = 0) const {
         T ans = base;
         for (std::size_t i = digits - 1, all = std::size_t(1) << base_size(); all > 1 and ~i; --i) {
             if (basic[i] == 0) {
@@ -49,7 +49,7 @@ public:
         return ans;
     }
 
-    constexpr auto rank(T value) const -> T {
+    T rank(T value) const {
         T ans = 0;
         for (std::size_t i = digits - 1, all = std::size_t(1) << base_size(); ~i; --i) {
             if (basic[i] == 0) {
@@ -63,7 +63,7 @@ public:
         return ans;
     }
 
-    constexpr auto insert(T value) -> std::size_t {
+    std::size_t insert(T value) {
         for (std::size_t i = std::bit_width(value) - 1; value != 0 and ~i; --i) {
             if (value >> i & 1) {
                 if (basic[i] == 0) {
@@ -77,7 +77,7 @@ public:
         return -1;
     }
 
-    constexpr auto contains(T value) const -> bool {
+    bool contains(T value) const {
         for (std::size_t i = std::bit_width(value) - 1; value != 0 and ~i; --i) {
             if (basic[i] != 0 and (value >> i & 1)) {
                 value ^= basic[i];
@@ -86,13 +86,13 @@ public:
         return value == 0;
     }
 
-    constexpr auto base_size() const -> std::size_t {
+    std::size_t base_size() const {
         return std::count_if(basic.begin(), basic.end(), [](auto x) {
             return x != 0;
         });
     }
 
-    constexpr auto enumerate(auto &&call) const -> void {
+    void enumerate(auto &&call) const {
         std::vector<std::size_t> next(digits + 1, -1);
         for (std::size_t last = digits, i = digits - 1; ~i; --i) {
             if (basic[i] != 0) {
@@ -110,7 +110,7 @@ public:
         dfs(dfs, digits, 0, call);
     }
 
-    constexpr auto enumerate_base(auto &&call) const -> void {
+    void enumerate_base(auto &&call) const {
         for (std::size_t i = digits - 1; ~i; --i) {
             if (basic[i] != 0) {
                 call(basic[i]);
@@ -118,7 +118,7 @@ public:
         }
     }
 
-    constexpr auto max(T base = 0) const -> T {
+    T max(T base = 0) const {
         T res = base;
         for (std::size_t i = digits - 1; ~i; --i) {
             if ((res ^ basic[i]) > res) {
@@ -128,11 +128,11 @@ public:
         return res;
     }
 
-    constexpr auto min(T base = 0) const -> T {
+    T min(T base = 0) const {
         return kth(0, base);
     }
 
-    constexpr auto operator+=(const XorBase &other) -> XorBase & {
+    XorBase &operator+=(const XorBase &other) {
         for (std::size_t i = 0; i != digits; ++i) {
             if (other.basic[i] != 0) {
                 insert(other.basic[i]);
@@ -141,7 +141,7 @@ public:
         return *this;
     }
 
-    friend constexpr auto operator+(const XorBase &lhs, const XorBase &rhs) -> XorBase {
+    friend XorBase operator+(const XorBase &lhs, const XorBase &rhs) {
         return XorBase(lhs) += rhs;
     }
 
