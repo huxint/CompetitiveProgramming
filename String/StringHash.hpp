@@ -14,23 +14,23 @@ private:
     using hash = std::array<std::uint64_t, width>;
 
 public:
-    constexpr StringHash() {}
+    StringHash() {}
 
-    constexpr StringHash(std::string_view str) {
+    StringHash(std::string_view str) {
         init(str.begin(), str.end());
     }
 
     template <typename Iterator>
-    constexpr StringHash(Iterator begin, Iterator end) {
+    StringHash(Iterator begin, Iterator end) {
         init(begin, end);
     }
 
-    constexpr auto init(std::string_view str) -> void {
+    void init(std::string_view str) {
         init(str.begin(), str.end());
     }
 
     template <typename Iterator>
-    constexpr auto init(Iterator begin, Iterator end) -> void {
+    void init(Iterator begin, Iterator end) {
         _size = end - begin;
         power.resize(size() + 1);
         table.resize(size() + 1);
@@ -47,15 +47,15 @@ public:
         }
     }
 
-    constexpr auto size() const -> std::size_t {
+    std::size_t size() const {
         return _size;
     }
 
-    constexpr auto get() const -> hash {
+    hash get() const {
         return table[size()];
     }
 
-    constexpr auto get(std::size_t l, std::size_t r) const -> hash {
+    hash get(std::size_t l, std::size_t r) const {
         hash res{};
         for (std::size_t i = 0; i < width; ++i) {
             res[i] = table[r + 1][i] - table[l][i] * power[r - l + 1][i] % modular[i];
@@ -66,16 +66,16 @@ public:
         return res;
     }
 
-    friend constexpr auto operator==(const StringHash &lhs, const StringHash &rhs) -> bool {
+    friend bool operator==(const StringHash &lhs, const StringHash &rhs) {
         return lhs.get() == rhs.get();
     }
 
-    friend constexpr auto operator<=>(const StringHash &lhs, const StringHash &rhs) -> std::strong_ordering {
+    friend std::strong_ordering operator<=>(const StringHash &lhs, const StringHash &rhs) {
         return lhs.get() <=> rhs.get();
     }
 
     template <typename Ostream>
-    friend constexpr auto operator<<(Ostream &ostream, const StringHash &self) -> Ostream & {
+    friend Ostream &operator<<(Ostream &ostream, const StringHash &self) {
         return ostream << self.get();
     }
 
@@ -86,7 +86,7 @@ private:
 };
 
 namespace RandomHashing {
-    constexpr auto seed() -> std::uint64_t {
+    constexpr std::uint64_t seed() {
         std::uint64_t shifted = 0;
         for (const auto c : __TIME__ __TIMESTAMP__ __DATE__) {
             (shifted += c) *= 6364136223846793005ULL;
@@ -98,7 +98,7 @@ namespace RandomHashing {
     }
 
     template <std::unsigned_integral size>
-    constexpr auto MillerRabin(size value) -> bool {
+    constexpr bool MillerRabin(size value) {
         using u32 = unsigned;
         using u64 = unsigned long long;
         using u128 = unsigned __int128;
@@ -157,7 +157,7 @@ namespace RandomHashing {
         }
     }
 
-    constexpr auto generate_prime(std::size_t left, std::size_t right) -> std::size_t {
+    constexpr std::size_t generate_prime(std::size_t left, std::size_t right) {
         auto shifted = seed();
         std::size_t value;
         do {
@@ -170,8 +170,8 @@ namespace RandomHashing {
     }
 }
 
-constexpr auto base_value = RandomHashing::generate_prime(100000000000ULL, 10000000000000ULL);
-constexpr auto modular_value = RandomHashing::generate_prime(100000000000000000ULL, 3000000000000000000ULL);
-constexpr auto base = std::array<std::uint64_t, 1>{base_value};
-constexpr auto modular = std::array<std::uint64_t, 1>{modular_value};
-using Hashing = StringHash<1, base, modular>;
+constexpr auto base = RandomHashing::generate_prime(100000000000ULL, 10000000000000ULL);
+constexpr auto modular = RandomHashing::generate_prime(100000000000000000ULL, 3000000000000000000ULL);
+constexpr auto Base = std::array<std::uint64_t, 1>{base};
+constexpr auto Modular = std::array<std::uint64_t, 1>{modular};
+using Hashing = StringHash<1, Base, Modular>;
