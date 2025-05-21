@@ -1,13 +1,13 @@
 #pragma once
 #include <bits/stdc++.h>
 
-template <std::unsigned_integral size>
-constexpr auto MillerRabin(size value) -> bool {
+template <std::unsigned_integral T>
+constexpr bool MillerRabin(T value) {
     using u32 = unsigned;
     using u64 = unsigned long long;
     using u128 = unsigned __int128;
-    constexpr auto digits = std::numeric_limits<size>::digits;
-    using next_size = std::conditional_t<(digits < 64), u64, u128>;
+    constexpr auto digits = std::numeric_limits<T>::digits;
+    using long_size = std::conditional_t<(digits < 64), u64, u128>;
 
     if (value < 64) {
         return 0x28208a20a08a28ac >> value & 1;
@@ -18,27 +18,27 @@ constexpr auto MillerRabin(size value) -> bool {
     }
 
     u32 count = std::countr_zero(value - 1);
-    size u = (value - 1) >> count, inverse = size(2) - value;
+    T u = (value - 1) >> count, inverse = T(2) - value;
 
     for (u32 i = digits <= 64; i < 5; ++i) {
-        inverse *= size(2) - value * inverse;
+        inverse *= T(2) - value * inverse;
     }
 
-    auto multiply = [&value, &inverse](size lhs, size rhs) -> size {
-        const auto res = next_size(lhs) * rhs;
-        return value + size(res >> digits) - size((next_size(size(res) * inverse) * value) >> digits);
+    auto multiply = [&value, &inverse](T lhs, T rhs) -> T {
+        const auto res = long_size(lhs) * rhs;
+        return value + T(res >> digits) - T((long_size(T(res) * inverse) * value) >> digits);
     };
 
-    const size one = -value % value, value_inverse = -next_size(value) % value, value_reduce_one = value - one;
+    const T one = -value % value, value_inverse = -long_size(value) % value, value_reduce_one = value - one;
 
-    auto prime_test = [&](std::initializer_list<size> test_base) -> bool {
+    auto prime_test = [&](std::initializer_list<T> test_base) -> bool {
         return std::all_of(test_base.begin(), test_base.end(), [&](auto base) -> bool {
             if (base >= value) {
                 return true;
             }
-            size res = one;
+            T res = one;
             base = multiply(base, value_inverse);
-            for (size exp = u; exp != 0; exp >>= 1) {
+            for (T exp = u; exp != 0; exp >>= 1) {
                 if (exp & 1) {
                     res = multiply(res, base);
                 }
