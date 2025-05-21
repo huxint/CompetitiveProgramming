@@ -39,19 +39,19 @@ public:
         }
     }
 
-    constexpr auto set(const T &value) -> void {
+    constexpr void set(const T &value) {
         matrix.fill(value);
     }
 
-    constexpr auto rows() const -> std::size_t {
+    constexpr std::size_t rows() const {
         return row;
     }
 
-    constexpr auto cols() const -> std::size_t {
+    constexpr std::size_t cols() const {
         return col;
     }
 
-    static constexpr auto unit() -> Matrix {
+    static constexpr Matrix unit() {
         static_assert(row == col);
         Matrix res;
         for (std::size_t i = 0; i < row; ++i) {
@@ -60,7 +60,7 @@ public:
         return res;
     }
 
-    constexpr auto power(std::size_t exp) const -> Matrix {
+    constexpr Matrix power(std::size_t exp) const {
         static_assert(row == col);
         Matrix res(unit());
         for (Matrix base(*this); exp != 0; exp >>= 1, base = base * base) {
@@ -71,7 +71,7 @@ public:
         return res;
     }
 
-    constexpr auto transpose() const -> Matrix<T, col, row> {
+    constexpr Matrix<T, col, row> transpose() const {
         Matrix<T, col, row> res;
         for (std::size_t i = 0; i < row; ++i) {
             for (std::size_t j = 0; j < col; ++j) {
@@ -81,23 +81,23 @@ public:
         return res;
     }
 
-    constexpr auto begin() -> decltype(auto) {
+    constexpr auto begin() {
         return matrix.begin();
     }
 
-    constexpr auto end() -> decltype(auto) {
+    constexpr auto end() {
         return matrix.end();
     }
 
-    constexpr auto operator()(std::size_t i, std::size_t j) -> T & {
+    constexpr T &operator()(std::size_t i, std::size_t j) {
         return matrix.at(index(i, j));
     }
 
-    constexpr auto operator()(std::size_t i, std::size_t j) const -> const T & {
+    constexpr const T &operator()(std::size_t i, std::size_t j) const {
         return matrix.at(index(i, j));
     }
 
-    constexpr auto operator+=(const Matrix &other) -> Matrix & {
+    constexpr Matrix &operator+=(const Matrix &other) {
         for (std::size_t i = 0; i < row; ++i) {
             for (std::size_t j = 0; j < col; ++j) {
                 (*this)(i, j) += other(i, j);
@@ -106,7 +106,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator-=(const Matrix &other) -> Matrix & {
+    constexpr Matrix &operator-=(const Matrix &other) {
         for (std::size_t i = 0; i < row; ++i) {
             for (std::size_t j = 0; j < col; ++j) {
                 (*this)(i, j) -= other(i, j);
@@ -115,42 +115,42 @@ public:
         return *this;
     }
 
-    constexpr auto operator*=(const T &other) -> Matrix & {
+    constexpr Matrix &operator*=(const T &other) {
         std::transform(matrix.begin(), matrix.end(), matrix.begin(), [&](const auto &value) {
             return value * other;
         });
         return *this;
     }
 
-    constexpr auto operator/=(const T &other) -> Matrix & {
+    constexpr Matrix &operator/=(const T &other) {
         std::transform(matrix.begin(), matrix.end(), matrix.begin(), [&](const auto &value) {
             return value / other;
         });
         return *this;
     }
 
-    friend constexpr auto operator+(const Matrix &lhs, const Matrix &rhs) -> Matrix {
+    friend constexpr Matrix operator+(const Matrix &lhs, const Matrix &rhs) {
         return Matrix(lhs) += rhs;
     }
 
-    friend constexpr auto operator-(const Matrix &lhs, const Matrix &rhs) -> Matrix {
+    friend constexpr Matrix operator-(const Matrix &lhs, const Matrix &rhs) {
         return Matrix(lhs) -= rhs;
     }
 
-    friend constexpr auto operator*(const Matrix &lhs, const T &rhs) -> Matrix {
+    friend constexpr Matrix operator*(const Matrix &lhs, const T &rhs) {
         return Matrix(lhs) *= rhs;
     }
 
-    friend constexpr auto operator*(const T &lhs, const Matrix &rhs) -> Matrix {
+    friend constexpr Matrix operator*(const T &lhs, const Matrix &rhs) {
         return Matrix(rhs) *= lhs;
     }
 
-    friend constexpr auto operator/(const Matrix &lhs, const T &rhs) -> Matrix {
+    friend constexpr Matrix operator/(const Matrix &lhs, const T &rhs) {
         return Matrix(lhs) /= rhs;
     }
 
     template <std::size_t size>
-    friend constexpr auto operator*(const Matrix &lhs, const Matrix<T, col, size> &rhs) -> Matrix<T, row, size> {
+    friend constexpr Matrix<T, row, size> operator*(const Matrix &lhs, const Matrix<T, col, size> &rhs) {
         Matrix<T, row, size> res;
         for (std::size_t i = 0; i < row; ++i) {
             for (std::size_t j = 0; j < col; ++j) {
@@ -166,12 +166,12 @@ public:
         return res;
     }
 
-    friend constexpr auto operator==(const Matrix &lhs, const Matrix &rhs) -> bool {
+    friend constexpr bool operator==(const Matrix &lhs, const Matrix &rhs) {
         return lhs.matrix == rhs.matrix;
     }
 
     template <typename Ostream>
-    friend constexpr auto operator<<(Ostream &ostream, const Matrix &value) -> Ostream & {
+    friend Ostream &operator<<(Ostream &ostream, const Matrix &value) {
         for (std::size_t i = 0; i < row; ++i) {
             for (std::size_t j = 0; j < col; ++j) {
                 ostream << value(i, j) << " \n"[j + 1 == col];
@@ -182,7 +182,7 @@ public:
 
 private:
     std::array<T, row * col> matrix;
-    constexpr auto index(std::size_t i, std::size_t j) const -> std::size_t {
+    constexpr std::size_t index(std::size_t i, std::size_t j) const {
         return i * col + j;
     }
 };
