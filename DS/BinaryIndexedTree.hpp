@@ -29,7 +29,7 @@ public:
         tree.assign(max, node{});
     }
 
-    BinaryIndexedTree(const std::ranges::range auto &container) : BinaryIndexedTree(container.begin(), container.end()) {}
+    BinaryIndexedTree(const std::ranges::range auto &container) : BinaryIndexedTree(std::forward<decltype(container)>(container).begin(), std::forward<decltype(container)>(container).end()) {}
 
     template <typename Iterator>
     BinaryIndexedTree(Iterator begin, Iterator end) : BinaryIndexedTree(end - begin, [&](const auto &index) {

@@ -7,18 +7,18 @@ private:
     using size_type = unsigned;
 
 public:
-    constexpr LazySegmentTree(std::integral auto n) : LazySegmentTree(n, [](auto...) {
+    LazySegmentTree(std::integral auto n) : LazySegmentTree(n, [](auto...) {
         return e();
     }) {}
 
-    constexpr LazySegmentTree(const std::ranges::range auto &container) : LazySegmentTree(container.begin(), container.end()) {}
+    LazySegmentTree(const std::ranges::range auto &container) : LazySegmentTree(std::forward<decltype(container)>(container).begin(), std::forward<decltype(container)>(container).end()) {}
 
     template <typename Iterator>
-    constexpr LazySegmentTree(Iterator begin, Iterator end) : LazySegmentTree(end - begin, [&](const auto &index) {
+    LazySegmentTree(Iterator begin, Iterator end) : LazySegmentTree(end - begin, [&](const auto &index) {
         return *(begin + index);
     }) {}
 
-    constexpr LazySegmentTree(std::integral auto n, auto &&mapping) : max_range(n) {
+    LazySegmentTree(std::integral auto n, auto &&mapping) : max_range(n) {
         if (max_range == 0) {
             return;
         }
@@ -27,18 +27,18 @@ public:
         tree = std::vector<Info>(ceil_size << 1, e());
         lazy = std::vector<Function>(ceil_size, id());
         for (size_type index = 0; index < max_range; ++index) {
-            tree[ceil_size + index] = mapping(index);
+            tree[ceil_size + index] = std::forward<decltype(mapping)>(mapping)(index);
         }
         for (size_type index = ceil_size - 1; index > 0; --index) {
             update(index);
         }
     }
 
-    constexpr auto prod_all() -> Info {
+    Info prod_all() {
         return tree[1];
     }
 
-    constexpr auto get(size_type position) -> Info {
+    Info get(size_type position) {
         position += ceil_size;
         for (size_type index = ceil_log; index > 0; --index) {
             push(position >> index);
@@ -46,7 +46,7 @@ public:
         return tree[position];
     }
 
-    constexpr auto set(size_type position, Info value) -> void {
+    void set(size_type position, Info value) {
         position += ceil_size;
         for (size_type index = ceil_log; index > 0; --index) {
             push(position >> index);
@@ -57,7 +57,7 @@ public:
         }
     }
 
-    constexpr auto prod(size_type left, size_type right) -> Info {
+    Info prod(size_type left, size_type right) {
         left += ceil_size, right += ceil_size + 1;
         for (size_type index = ceil_log; index > 0; --index) {
             if (((left >> index) << index) != left) {
@@ -79,7 +79,7 @@ public:
         return op(ls, rs);
     }
 
-    constexpr auto apply(size_type position, Function function) -> void {
+    void apply(size_type position, Function function) {
         position += ceil_size;
         for (size_type index = ceil_log; index > 0; --index) {
             push(position >> index);
@@ -90,7 +90,7 @@ public:
         }
     }
 
-    constexpr auto apply(size_type left, size_type right, Function function) -> void {
+    void apply(size_type left, size_type right, Function function) {
         left += ceil_size, right += ceil_size + 1;
         for (size_type index = ceil_log; index > 0; --index) {
             if (((left >> index) << index) != left) {
@@ -118,7 +118,7 @@ public:
         }
     }
 
-    constexpr auto min_left(size_type right, auto &&check) const -> size_type {
+    size_type min_left(size_type right, auto &&check) const {
         if (right < 0 or right >= max_range or not check(get(right))) {
             return -1;
         }
@@ -127,7 +127,7 @@ public:
         });
     }
 
-    constexpr auto max_right(size_type left, auto &&check) const -> size_type {
+    size_type max_right(size_type left, auto &&check) const {
         if (left < 0 or left >= max_range or not check(get(left))) {
             return -1;
         }
@@ -140,25 +140,25 @@ private:
     std::vector<Info> tree;
     std::vector<Function> lazy;
     size_type max_range, ceil_size, ceil_log;
-    constexpr auto update(size_type index) -> void {
+    void update(size_type index) {
         tree[index] = op(tree[index << 1], tree[index << 1 | 1]);
     }
 
-    constexpr auto push(size_type index) -> void {
+    void push(size_type index) {
         apply_all(index << 1, lazy[index]);
         apply_all(index << 1 | 1, lazy[index]);
         lazy[index] = id();
     }
 
-    constexpr auto apply_all(size_type index, Function function) -> void {
+    void apply_all(size_type index, Function function) {
         tree[index] = Mapping(function, tree[index]);
         if (index < ceil_size) {
             lazy[index] = Composition(function, lazy[index]);
         }
     }
 
-    constexpr auto binary_search(int ok, int ng, auto &&check) -> size_type {
-        for (int x; std::abs(ok - ng) > 1; (check(x) ? ok : ng) = x) {
+    size_type binary_search(int ok, int ng, auto &&check) {
+        for (int x; std::abs(ok - ng) > 1; (std::forward<decltype(check)>(check)(x) ? ok : ng) = x) {
             x = ok + (ng - ok) / 2;
         }
         return ok;
