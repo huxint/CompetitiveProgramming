@@ -21,8 +21,8 @@ using i32 = int;
 using u32 = unsigned;
 using i64 = long long;
 using u64 = unsigned long long;
-constexpr auto inf32 = std::numeric_limits<int>::max() / 2;
-constexpr auto inf64 = std::numeric_limits<long long>::max() / 2;
+constexpr int inf32 = std::numeric_limits<int>::max() / 2;
+constexpr long long inf64 = std::numeric_limits<long long>::max() / 2;
 
 template <typename... Args>
 bool cmax(auto &value, const Args &...args) {
@@ -43,14 +43,14 @@ bool cmin(auto &value, const Args &...args) {
 }
 
 auto bisect_search(std::integral auto ok, std::integral auto ng, auto &&check) {
-    for (decltype(ok) x; std::abs(ok - ng) > 1; (check(x) ? ok : ng) = x) {
+    for (decltype(ok) x; std::abs(ok - ng) > 1; (std::forward<decltype(check)>(check)(x) ? ok : ng) = x) {
         x = ok + (ng - ok) / 2;
     }
     return ok;
 }
 
 auto bisect_search(std::floating_point auto ok, std::floating_point auto ng, auto &&check, std::size_t loop = 30) {
-    for (decltype(ok) x; loop--; (check(x) ? ok : ng) = x) {
+    for (decltype(ok) x; loop--; (std::forward<decltype(check)>(check)(x) ? ok : ng) = x) {
         x = ok + (ng - ok) / 2;
     }
     return ok;
