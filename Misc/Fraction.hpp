@@ -104,7 +104,7 @@ public:
     }
 
     template <typename Ostream>
-    friend constexpr Ostream &operator<<(Ostream &ostream, const Fraction &self) {
+    friend Ostream &operator<<(Ostream &ostream, const Fraction &self) {
         if (self.y == 1) {
             return ostream << self.x;
         } else {
