@@ -20,7 +20,7 @@ private:
     using size_type = std::size_t;
 
 public:
-    static constexpr size_t npos = size_type(-1);
+    static constexpr std::size_t npos = -1;
 
 private:
     class reference {
