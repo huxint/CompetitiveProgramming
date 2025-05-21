@@ -12,7 +12,7 @@ template <typename Base>
 }
 class Combination {
 public:
-    Combination() : _max{}, _inverse{1}, _factorial{1}, _factorial_inverse{1} {}
+    Combination() : _max{}, _inverse{1}, _factorial{1}, _ifactorial{1} {}
 
     Combination(std::size_t max) : Combination() {
         init(max);
@@ -27,14 +27,14 @@ public:
         }
         _inverse.resize(max + 1);
         _factorial.resize(max + 1);
-        _factorial_inverse.resize(max + 1);
+        _ifactorial.resize(max + 1);
         for (std::size_t i = _max + 1; i <= max; ++i) {
             _factorial[i] = i * _factorial[i - 1];
         }
-        _factorial_inverse[max] = _factorial[max].inverse();
+        _ifactorial[max] = _factorial[max].inverse();
         for (std::size_t i = max; i > _max; --i) {
-            _factorial_inverse[i - 1] = i * _factorial_inverse[i];
-            _inverse[i] = _factorial_inverse[i] * _factorial[i - 1];
+            _ifactorial[i - 1] = i * _ifactorial[i];
+            _inverse[i] = _ifactorial[i] * _factorial[i - 1];
         }
         _max = max;
     }
@@ -53,25 +53,25 @@ public:
         return _inverse[value];
     }
 
-    Base factorial_inverse(std::uint32_t value) {
+    Base ifactorial(std::uint32_t value) {
         if (value > _max) {
             init(value << 1);
         }
-        return _factorial_inverse[value];
+        return _ifactorial[value];
     }
 
     Base combination(std::uint32_t n, std::uint32_t m) {
         if (n <= m) {
             return n == m;
         }
-        return factorial(n) * factorial_inverse(m) * factorial_inverse(n - m);
+        return factorial(n) * ifactorial(m) * ifactorial(n - m);
     }
 
     Base permutation(std::uint32_t n, std::uint32_t m) {
         if (n < m) {
             return 0;
         }
-        return factorial(n) * factorial_inverse(n - m);
+        return factorial(n) * ifactorial(n - m);
     }
 
     /**
@@ -90,7 +90,7 @@ public:
     Base permutation_multi(Iterator begin, Iterator end) {
         Base res = factorial(std::accumulate(begin, end, 0));
         for (auto it = begin; it != end; ++it) {
-            res *= factorial_inverse(*it);
+            res *= ifactorial(*it);
         }
         return res;
     }
@@ -144,5 +144,5 @@ private:
     std::size_t _max;
     std::vector<Base> _inverse;
     std::vector<Base> _factorial;
-    std::vector<Base> _factorial_inverse;
+    std::vector<Base> _ifactorial;
 };
