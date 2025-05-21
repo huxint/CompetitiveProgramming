@@ -47,15 +47,15 @@ public:
         *this = std::string_view(value);
     }
 
-    constexpr auto operator=(const char *value) -> BigInteger & {
+    constexpr BigInteger &operator=(const char *value) {
         return *this = std::string_view(value);
     }
 
-    constexpr auto operator=(const std::string &value) -> BigInteger & {
+    constexpr BigInteger &operator=(const std::string &value) {
         return *this = std::string_view(value);
     }
 
-    constexpr auto operator=(std::integral auto value) -> BigInteger & {
+    constexpr BigInteger &operator=(std::integral auto value) {
         if (value == std::numeric_limits<decltype(value)>::min()) {
             return *this = std::to_string(value);
         }
@@ -70,7 +70,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator=(std::string_view value) -> BigInteger & {
+    constexpr BigInteger &operator=(std::string_view value) {
         if (value.empty()) {
             return *this = 0;
         }
@@ -96,11 +96,11 @@ public:
         return not zero();
     }
 
-    constexpr auto zero() const -> bool {
+    constexpr bool zero() const {
         return sign == 0;
     }
 
-    constexpr auto power(std::size_t exp) const -> BigInteger {
+    constexpr BigInteger power(std::size_t exp) const {
         BigInteger res(1);
         for (BigInteger base(*this); exp != 0; exp >>= 1, base *= base) {
             if (exp & 1) {
@@ -110,13 +110,13 @@ public:
         return res;
     }
 
-    constexpr auto abs() const -> BigInteger {
+    constexpr BigInteger abs() const {
         BigInteger res(*this);
         res.sign = sign != 0;
         return res;
     }
 
-    constexpr auto divby2() -> void {
+    constexpr void divby2() {
         for (std::size_t i = width_size() - 1; i + 1 != 0; --i) {
             if ((digits[i] & 1) and i != 0) {
                 digits[i - 1] += base;
@@ -126,21 +126,21 @@ public:
         check_zero();
     }
 
-    constexpr auto div2() const -> BigInteger {
+    constexpr BigInteger div2() const {
         BigInteger res(*this);
         res.divby2();
         return res;
     }
 
-    constexpr auto to_signed() const -> auto {
+    constexpr long long to_signed() const {
         return std::stoll(to_string());
     }
 
-    constexpr auto to_unsigned() const -> auto {
+    constexpr unsigned long long to_unsigned() const {
         return std::stoull(to_string());
     }
 
-    constexpr auto to_binary(bool reverse = true) const -> std::string {
+    constexpr std::string to_binary(bool reverse = true) const {
         std::string res;
         for (BigInteger value(*this); not value.zero(); value.divby2()) {
             res += (value.digits.front() & 1) | 0X30;
@@ -151,7 +151,7 @@ public:
         return res;
     }
 
-    constexpr auto to_hex(bool upper = false) const -> std::string {
+    constexpr std::string to_hex(bool upper = false) const {
         auto &hex_chars(upper ? hex_chars_upper : hex_chars_lower);
         std::string res;
         std::string str = to_binary();
@@ -162,7 +162,7 @@ public:
         return res;
     }
 
-    constexpr auto to_string() const -> std::string {
+    constexpr std::string to_string() const {
         std::string res;
         res.reserve(width_size() * width + 1);
         if (sign == -1) {
@@ -177,49 +177,49 @@ public:
         return res;
     }
 
-    constexpr auto operator~() const -> BigInteger {
+    constexpr BigInteger operator~() const {
         return -(*this) - 1;
     }
 
-    constexpr auto operator+() const -> BigInteger {
+    constexpr BigInteger operator+() const {
         return *this;
     }
 
-    constexpr auto operator-() const -> BigInteger {
+    constexpr BigInteger operator-() const {
         BigInteger res(*this);
         res.sign = -sign;
         return res;
     }
 
-    constexpr auto operator++(int) -> BigInteger {
+    constexpr BigInteger operator++(int) {
         BigInteger res(*this);
         ++*this;
         return res;
     }
 
-    constexpr auto operator--(int) -> BigInteger {
+    constexpr BigInteger operator--(int) {
         BigInteger res(*this);
         --*this;
         return res;
     }
 
-    constexpr auto operator++() -> BigInteger & {
+    constexpr BigInteger &operator++() {
         return *this += 1;
     }
 
-    constexpr auto operator--() -> BigInteger & {
+    constexpr BigInteger &operator--() {
         return *this -= 1;
     }
 
-    constexpr auto operator<<(i64 shift) -> BigInteger {
+    constexpr BigInteger operator<<(i64 shift) {
         return BigInteger(*this) <<= shift;
     }
 
-    constexpr auto operator>>(i64 shift) -> BigInteger {
+    constexpr BigInteger operator>>(i64 shift) {
         return BigInteger(*this) >>= shift;
     }
 
-    constexpr auto operator<<=(i64 shift) -> BigInteger & {
+    constexpr BigInteger &operator<<=(i64 shift) {
         if (shift <= 0) {
             return *this;
         }
@@ -229,7 +229,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator>>=(i64 shift) -> BigInteger & {
+    constexpr BigInteger &operator>>=(i64 shift) {
         if (shift <= 0) {
             return *this;
         }
@@ -239,25 +239,25 @@ public:
         return *this;
     }
 
-    constexpr auto operator&=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator&=(const BigInteger &other) {
         return binary_op_helper(other, [](int lhs, int rhs) -> int {
             return lhs & rhs;
         });
     }
 
-    constexpr auto operator|=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator|=(const BigInteger &other) {
         return binary_op_helper(other, [](int lhs, int rhs) -> int {
             return lhs | rhs;
         });
     }
 
-    constexpr auto operator^=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator^=(const BigInteger &other) {
         return binary_op_helper(other, [](int lhs, int rhs) -> int {
             return lhs ^ rhs;
         });
     }
 
-    constexpr auto operator+=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator+=(const BigInteger &other) {
         if (sign == other.sign) {
             plus_impl(other);
         } else if (compare_abs(other) >= 0) {
@@ -270,7 +270,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator-=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator-=(const BigInteger &other) {
         if (sign == other.sign) {
             if (compare_abs(other) >= 0) {
                 minus_impl(other);
@@ -286,7 +286,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator*=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator*=(const BigInteger &other) {
         if (zero()) {
             return *this;
         }
@@ -299,54 +299,54 @@ public:
         return *this;
     }
 
-    constexpr auto operator/=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator/=(const BigInteger &other) {
         // Todo
     }
 
-    constexpr auto operator%=(const BigInteger &other) -> BigInteger & {
+    constexpr BigInteger &operator%=(const BigInteger &other) {
         // Todo
     }
 
-    friend constexpr auto operator&(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator&(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) &= rhs;
     }
 
-    friend constexpr auto operator|(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator|(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) |= rhs;
     }
 
-    friend constexpr auto operator^(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator^(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) ^= rhs;
     }
 
-    friend constexpr auto operator+(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator+(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) += rhs;
     }
 
-    friend constexpr auto operator-(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator-(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) -= rhs;
     }
 
-    friend constexpr auto operator*(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator*(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) *= rhs;
     }
 
-    friend constexpr auto operator/(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator/(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) /= rhs;
     }
 
-    friend constexpr auto operator%(const BigInteger &lhs, const BigInteger &rhs) -> BigInteger {
+    friend constexpr BigInteger operator%(const BigInteger &lhs, const BigInteger &rhs) {
         return BigInteger(lhs) %= rhs;
     }
 
-    friend constexpr auto operator==(const BigInteger &lhs, const BigInteger &rhs) -> bool {
+    friend constexpr bool operator==(const BigInteger &lhs, const BigInteger &rhs) {
         if (lhs.sign != rhs.sign) {
             return false;
         }
         return lhs.digits == rhs.digits;
     }
 
-    friend constexpr auto operator<=>(const BigInteger &lhs, const BigInteger &rhs) -> std::strong_ordering {
+    friend constexpr std::strong_ordering operator<=>(const BigInteger &lhs, const BigInteger &rhs) {
         if (lhs.sign != rhs.sign) {
             return lhs.sign <=> rhs.sign;
         } else if (lhs.zero()) {
@@ -359,7 +359,7 @@ public:
     }
 
     template <typename Istream>
-    friend constexpr auto operator>>(Istream &istream, BigInteger &self) -> Istream & {
+    friend Istream &operator>>(Istream &istream, BigInteger &self) {
         std::string value;
         istream >> value;
         self = value;
@@ -367,7 +367,7 @@ public:
     }
 
     template <typename Ostream>
-    friend constexpr auto operator<<(Ostream &ostream, const BigInteger &self) -> Ostream & {
+    friend Ostream &operator<<(Ostream &ostream, const BigInteger &self) {
         if (self.sign == -1) {
             ostream << '-';
         }
@@ -389,27 +389,27 @@ private:
     int sign;
     std::vector<u32> digits;
 
-    constexpr auto width_size() const -> std::size_t {
+    constexpr std::size_t width_size() const {
         return digits.size();
     }
 
-    constexpr auto compare_abs(const BigInteger &other) const -> std::strong_ordering {
+    constexpr std::strong_ordering compare_abs(const BigInteger &other) const {
         return width_size() != other.width_size() ? width_size() <=> other.width_size() : std::lexicographical_compare_three_way(digits.rbegin(), digits.rend(), other.digits.rbegin(), other.digits.rend());
     }
 
-    constexpr auto check_zero() -> void {
+    constexpr void check_zero() {
         if (normalize(); digits.size() == 1 and digits.back() == 0) {
             sign = 0;
         }
     }
 
-    constexpr auto normalize() -> void {
+    constexpr void normalize() {
         while (digits.size() > 1 and digits.back() == 0) {
             digits.pop_back();
         }
     }
 
-    constexpr auto binary_op_helper(const BigInteger &other, auto &&op) -> BigInteger & {
+    constexpr BigInteger &binary_op_helper(const BigInteger &other, auto &&op) {
         std::string lhs = to_binary(false);
         std::string rhs = other.to_binary(false);
         *this = 0;
@@ -420,7 +420,7 @@ private:
         return *this;
     }
 
-    constexpr auto plus_impl(const BigInteger &other) -> void {
+    constexpr void plus_impl(const BigInteger &other) {
         bool carry = false;
         std::size_t i = 0;
         std::size_t size = other.width_size();
@@ -445,7 +445,7 @@ private:
         check_zero();
     }
 
-    constexpr auto minus_impl(const BigInteger &other) -> void {
+    constexpr void minus_impl(const BigInteger &other) {
         bool carry = false;
         auto current = digits.data();
         std::size_t size = other.width_size();
@@ -460,7 +460,7 @@ private:
         check_zero();
     }
 
-    constexpr auto simple_multiply(const std::vector<u32> &lhs, const std::vector<u32> &rhs) -> std::vector<u32> {
+    constexpr std::vector<u32> simple_multiply(const std::vector<u32> &lhs, const std::vector<u32> &rhs) {
         std::vector<u32> res(lhs.size() + rhs.size());
         for (std::size_t i = 0; i < lhs.size(); ++i) {
             for (std::size_t j = 0, carry = 0; (lhs[i] != 0 and j < rhs.size()) or carry != 0; ++j) {
@@ -474,7 +474,7 @@ private:
         return res;
     }
 
-    static constexpr auto convert_base(const std::vector<u32> &vector, std::size_t old_width, std::size_t new_width) -> std::vector<u32> {
+    static constexpr std::vector<u32> convert_base(const std::vector<u32> &vector, std::size_t old_width, std::size_t new_width) {
         std::vector<u32> res;
         std::size_t carry = 0;
         for (std::size_t i = 0, _width = 0; i < vector.size(); ++i) {
@@ -491,7 +491,7 @@ private:
         return res;
     }
 
-    constexpr auto karatsuba_multiply(const std::vector<u32> &lhs, const std::vector<u32> &rhs) -> std::vector<u32> {
+    constexpr std::vector<u32> karatsuba_multiply(const std::vector<u32> &lhs, const std::vector<u32> &rhs) {
         std::vector<u32> new_lhs = convert_base(lhs, width, karatsuba_width);
         std::vector<u32> new_rhs = convert_base(rhs, width, karatsuba_width);
         std::vector<u64> x(new_lhs.begin(), new_lhs.end());
@@ -544,6 +544,7 @@ private:
         return convert_base(res, karatsuba_width, width);
     }
 
-    constexpr auto divide_impl(const BigInteger &other) -> void {}
-
+    constexpr void divide_impl(const BigInteger &other) {
+        // Todo
+    }
 };
