@@ -11,16 +11,16 @@ private:
 public:
     constexpr Barrett32(u32 _mod) : modular(_mod), inverse(static_cast<u64>(-1) / _mod + 1) {}
 
-    constexpr auto setmod(u32 _mod) -> void {
+    constexpr void setmod(u32 _mod) {
         modular = _mod;
         inverse = static_cast<u64>(-1) / modular + 1;
     }
 
-    constexpr auto mod() const -> u32 {
+    constexpr u32 mod() const {
         return modular;
     }
 
-    constexpr auto multiply(u32 lhs, u32 rhs) const -> u32 {
+    constexpr u32 multiply(u32 lhs, u32 rhs) const {
         u64 value = static_cast<u64>(lhs) * rhs;
         u32 res = static_cast<u32>(value - static_cast<u64>((static_cast<u128>(value) * inverse) >> 64) * mod());
         return res >= mod() ? res += mod() : res;
