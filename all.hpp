@@ -13,6 +13,7 @@
 #include <cstring>
 #include <iomanip>
 #include <numeric>
+#include <concepts>
 #include <iostream>
 #include <algorithm>
 
