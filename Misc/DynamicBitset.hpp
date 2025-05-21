@@ -20,7 +20,7 @@ private:
     using size_type = std::size_t;
 
 public:
-    static constexpr auto npos = size_type(-1);
+    static constexpr size_t npos = size_type(-1);
 
 private:
     class reference {
@@ -31,7 +31,7 @@ private:
         constexpr reference(DynamicBitset &_bitset, size_type pos) noexcept : bitset(&_bitset), position(pos) {}
 
     public:
-        constexpr auto operator=(bool value) noexcept -> reference & {
+        constexpr reference &operator=(bool value) noexcept {
             if (value) {
                 bitset->set(position);
             } else {
@@ -40,7 +40,7 @@ private:
             return *this;
         }
 
-        constexpr auto operator=(const reference &other) noexcept -> reference & {
+        constexpr reference &operator=(const reference &other) noexcept {
             if (other) {
                 bitset->set(position);
             } else {
@@ -49,7 +49,7 @@ private:
             return *this;
         }
 
-        constexpr auto flip() noexcept -> reference & {
+        constexpr reference &flip() noexcept {
             bitset->flip(position);
             return *this;
         }
@@ -58,7 +58,7 @@ private:
             return const_cast<const DynamicBitset<Block> &>(*bitset)[position];
         }
 
-        constexpr auto operator~() const noexcept -> bool {
+        constexpr bool operator~() const noexcept {
             return !const_cast<const DynamicBitset<Block> &>(*bitset)[position];
         }
     };
@@ -80,7 +80,7 @@ public:
         sanitize();
     }
 
-    constexpr auto resize(size_type bit_count, bool value = false) -> void {
+    constexpr void resize(size_type bit_count, bool value = false) {
         const size_type old_block_count = blocks.size();
         const size_type new_block_count = block_count(bit_count);
         blocks.resize(new_block_count, value ? ~Block(0) : Block(0));
@@ -94,34 +94,34 @@ public:
         sanitize();
     }
 
-    constexpr auto clear() -> void {
+    constexpr void clear() {
         blocks.clear();
         bit_size = 0;
     }
 
-    constexpr auto size() const noexcept -> size_type {
+    constexpr size_type size() const noexcept {
         return bit_size;
     }
 
-    constexpr auto empty() const noexcept -> bool {
+    constexpr bool empty() const noexcept {
         return bit_size == 0;
     }
 
-    constexpr auto at(size_type pos) const -> bool {
+    constexpr bool at(size_type pos) const {
         if (pos >= bit_size) {
             throw std::out_of_range("DynamicBitset::at: position out of range");
         }
         return (*this)[pos];
     }
 
-    constexpr auto test(size_type pos) const -> bool {
+    constexpr bool test(size_type pos) const {
         if (pos >= bit_size) {
             throw std::out_of_range("DynamicBitset::test: position out of range");
         }
         return (*this)[pos];
     }
 
-    constexpr auto push_back(bool value) -> void {
+    constexpr void push_back(bool value) {
         const size_type new_size = bit_size + 1;
         const size_type required_blocks = block_count(new_size);
         if (required_blocks > blocks.size()) {
@@ -131,7 +131,7 @@ public:
         value ? set(bit_size - 1) : reset(bit_size - 1);
     }
 
-    constexpr auto pop_back() -> void {
+    constexpr void pop_back() {
         if (bit_size == 0) {
             throw std::out_of_range("DynamicBitset::pop_back: bitset is empty");
         }
@@ -143,7 +143,7 @@ public:
         sanitize();
     }
 
-    constexpr auto set() -> DynamicBitset & {
+    constexpr DynamicBitset &set() {
         for (auto &block : blocks) {
             block = ~Block(0);
         }
@@ -151,7 +151,7 @@ public:
         return *this;
     }
 
-    constexpr auto set(size_type pos) -> DynamicBitset & {
+    constexpr DynamicBitset &set(size_type pos) {
         if (pos >= bit_size) {
             throw std::out_of_range("DynamicBitset::set: position out of range");
         }
@@ -159,7 +159,7 @@ public:
         return *this;
     }
 
-    constexpr auto set(size_type first, size_type last) -> DynamicBitset & {
+    constexpr DynamicBitset &set(size_type first, size_type last) {
         if (first > last || last >= bit_size) {
             throw std::out_of_range("DynamicBitset::set(range): invalid range");
         }
@@ -178,14 +178,14 @@ public:
         return *this;
     }
 
-    constexpr auto reset() -> DynamicBitset & {
+    constexpr DynamicBitset &reset() {
         for (auto &block : blocks) {
             block = Block(0);
         }
         return *this;
     }
 
-    constexpr auto reset(size_type pos) -> DynamicBitset & {
+    constexpr DynamicBitset &reset(size_type pos) {
         if (pos >= bit_size) {
             throw std::out_of_range("DynamicBitset::reset: position out of range");
         }
@@ -193,7 +193,7 @@ public:
         return *this;
     }
 
-    constexpr auto reset(size_type first, size_type last) -> DynamicBitset & {
+    constexpr DynamicBitset &reset(size_type first, size_type last) {
         if (first > last || last >= bit_size) {
             throw std::out_of_range("DynamicBitset::reset(range): invalid range");
         }
@@ -212,7 +212,7 @@ public:
         return *this;
     }
 
-    constexpr auto flip() -> DynamicBitset & {
+    constexpr DynamicBitset &flip() {
         for (auto &block : blocks) {
             block = ~block;
         }
@@ -220,7 +220,7 @@ public:
         return *this;
     }
 
-    constexpr auto flip(size_type pos) -> DynamicBitset & {
+    constexpr DynamicBitset &flip(size_type pos) {
         if (pos >= bit_size) {
             throw std::out_of_range("DynamicBitset::flip: position out of range");
         }
@@ -228,7 +228,7 @@ public:
         return *this;
     }
 
-    constexpr auto flip(size_type first, size_type last) -> DynamicBitset & {
+    constexpr DynamicBitset &flip(size_type first, size_type last) {
         if (first > last || last >= bit_size) {
             throw std::out_of_range("DynamicBitset::flip(range): invalid range");
         }
@@ -247,7 +247,7 @@ public:
         return *this;
     }
 
-    constexpr auto any() const -> bool {
+    constexpr bool any() const {
         if (empty()) {
             return false;
         }
@@ -260,7 +260,7 @@ public:
         return blocks[last_block] != Block(0);
     }
 
-    constexpr auto all() const -> bool {
+    constexpr bool all() const {
         if (empty()) {
             return true;
         }
@@ -279,7 +279,7 @@ public:
         }
     }
 
-    constexpr auto any(size_type first, size_type last) const -> bool {
+    constexpr bool any(size_type first, size_type last) const {
         if (first > last || last >= bit_size) {
             throw std::out_of_range("DynamicBitset::any(range): invalid range");
         }
@@ -301,7 +301,7 @@ public:
         }
     }
 
-    constexpr auto all(size_type first, size_type last) const -> bool {
+    constexpr bool all(size_type first, size_type last) const {
         if (first > last || last >= bit_size) {
             throw std::out_of_range("DynamicBitset::all(range): invalid range");
         }
@@ -325,11 +325,11 @@ public:
         }
     }
 
-    constexpr auto none() const -> bool {
+    constexpr bool none() const {
         return !any();
     }
 
-    constexpr auto count() const -> size_type {
+    constexpr size_type count() const {
         size_type res = 0;
         for (const auto &block : blocks) {
             res += std::popcount(block);
@@ -337,7 +337,7 @@ public:
         return res;
     }
 
-    constexpr auto count(size_type first, size_type last) const -> size_type {
+    constexpr size_type count(size_type first, size_type last) const {
         if (first > last || last >= bit_size) {
             throw std::out_of_range("DynamicBitset::count(range): invalid range");
         }
@@ -356,7 +356,7 @@ public:
         }
     }
 
-    constexpr auto to_string() const -> std::string {
+    constexpr std::string to_string() const {
         std::string res;
         res.reserve(bit_size);
         for (size_type i = bit_size; i > 0; --i) {
@@ -365,7 +365,7 @@ public:
         return res;
     }
 
-    constexpr auto find_first() const -> size_type {
+    constexpr size_type find_first() const {
         for (size_type i = 0; i < blocks.size(); ++i) {
             if (blocks[i] != Block(0)) {
                 return i * digits + std::countr_zero(blocks[i]);
@@ -374,7 +374,7 @@ public:
         return npos;
     }
 
-    constexpr auto find_next(size_type pos) const -> size_type {
+    constexpr size_type find_next(size_type pos) const {
         if (pos >= bit_size) {
             return npos;
         }
@@ -393,7 +393,7 @@ public:
         return npos;
     }
 
-    constexpr auto find_first_zero() const -> size_type {
+    constexpr size_type find_first_zero() const {
         for (size_type i = 0; i < blocks.size(); ++i) {
             if (~blocks[i] != Block(0)) {
                 size_type pos = i * digits + std::countr_zero(~blocks[i]);
@@ -403,7 +403,7 @@ public:
         return npos;
     }
 
-    constexpr auto find_next_zero(size_type pos) const -> size_type {
+    constexpr size_type find_next_zero(size_type pos) const {
         if (pos >= bit_size) {
             return npos;
         }
@@ -424,7 +424,7 @@ public:
         return npos;
     }
 
-    constexpr auto is_subset_of(const DynamicBitset &other) const -> bool {
+    constexpr bool is_subset_of(const DynamicBitset &other) const {
         if (bit_size > other.bit_size) {
             return false;
         }
@@ -442,7 +442,7 @@ public:
         return true;
     }
 
-    constexpr auto intersects(const DynamicBitset &other) const -> bool {
+    constexpr bool intersects(const DynamicBitset &other) const {
         const size_type min_blocks = std::min(blocks.size(), other.blocks.size());
         for (size_type i = 0; i < min_blocks; ++i) {
             if ((blocks[i] & other.blocks[i]) != Block(0)) {
@@ -452,7 +452,7 @@ public:
         return false;
     }
 
-    constexpr auto rotate_left(size_type n) -> DynamicBitset & {
+    constexpr DynamicBitset &rotate_left(size_type n) {
         if (empty() || n % bit_size == 0) {
             return *this;
         }
@@ -467,7 +467,7 @@ public:
         return *this;
     }
 
-    constexpr auto rotate_right(size_type n) -> DynamicBitset & {
+    constexpr DynamicBitset &rotate_right(size_type n) {
         if (empty() || n % bit_size == 0) {
             return *this;
         }
@@ -482,7 +482,7 @@ public:
         return *this;
     }
 
-    constexpr auto get_subset(size_type start, size_type length) const -> DynamicBitset {
+    constexpr DynamicBitset get_subset(size_type start, size_type length) const {
         if (start >= bit_size || length == 0) {
             return DynamicBitset();
         }
@@ -496,7 +496,7 @@ public:
         return res;
     }
 
-    constexpr auto for_each_set_bit(auto &&call) const -> void {
+    constexpr void for_each_set_bit(auto &&call) const {
         for (size_type i = 0; i < blocks.size(); ++i) {
             Block block = blocks[i];
             while (block) {
@@ -510,7 +510,7 @@ public:
         }
     }
 
-    constexpr auto for_each_unset_bit(auto &&call) const -> void {
+    constexpr void for_each_unset_bit(auto &&call) const {
         for (size_type i = 0; i < blocks.size(); ++i) {
             Block block = ~blocks[i];
             if (i == blocks.size() - 1) {
@@ -530,15 +530,15 @@ public:
         }
     }
 
-    constexpr auto operator[](size_type pos) -> reference {
+    constexpr reference operator[](size_type pos) {
         return reference(*this, pos);
     }
 
-    [[nodiscard]] constexpr auto operator[](size_type pos) const -> bool {
+    [[nodiscard]] constexpr bool operator[](size_type pos) const {
         return (blocks[block_index(pos)] & bit_mask(pos)) != 0;
     }
 
-    constexpr auto operator&=(const DynamicBitset &rhs) -> DynamicBitset & {
+    constexpr DynamicBitset &operator&=(const DynamicBitset &rhs) {
         const size_type min_blocks = std::min(blocks.size(), rhs.blocks.size());
         for (size_type i = 0; i < min_blocks; ++i) {
             blocks[i] &= rhs.blocks[i];
@@ -549,7 +549,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator|=(const DynamicBitset &rhs) -> DynamicBitset & {
+    constexpr DynamicBitset &operator|=(const DynamicBitset &rhs) {
         const size_type min_blocks = std::min(blocks.size(), rhs.blocks.size());
         for (size_type i = 0; i < min_blocks; ++i) {
             blocks[i] |= rhs.blocks[i];
@@ -557,7 +557,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator^=(const DynamicBitset &rhs) -> DynamicBitset & {
+    constexpr DynamicBitset &operator^=(const DynamicBitset &rhs) {
         const size_type min_blocks = std::min(blocks.size(), rhs.blocks.size());
         for (size_type i = 0; i < min_blocks; ++i) {
             blocks[i] ^= rhs.blocks[i];
@@ -565,7 +565,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator<<=(size_type n) -> DynamicBitset & {
+    constexpr DynamicBitset &operator<<=(size_type n) {
         if (n >= bit_size) {
             reset();
             return *this;
@@ -594,7 +594,7 @@ public:
         return *this;
     }
 
-    constexpr auto operator>>=(size_type n) -> DynamicBitset & {
+    constexpr DynamicBitset &operator>>=(size_type n) {
         if (n >= bit_size) {
             reset();
             return *this;
@@ -622,31 +622,31 @@ public:
         return *this;
     }
 
-    friend constexpr auto operator~(const DynamicBitset &value) -> DynamicBitset {
+    friend constexpr DynamicBitset operator~(const DynamicBitset &value) {
         return DynamicBitset(value).flip();
     }
 
-    friend constexpr auto operator&(const DynamicBitset &lhs, const DynamicBitset &rhs) -> DynamicBitset {
+    friend constexpr DynamicBitset operator&(const DynamicBitset &lhs, const DynamicBitset &rhs) {
         return DynamicBitset(lhs) &= rhs;
     }
 
-    friend constexpr auto operator|(const DynamicBitset &lhs, const DynamicBitset &rhs) -> DynamicBitset {
+    friend constexpr DynamicBitset operator|(const DynamicBitset &lhs, const DynamicBitset &rhs) {
         return DynamicBitset(lhs) |= rhs;
     }
 
-    friend constexpr auto operator^(const DynamicBitset &lhs, const DynamicBitset &rhs) -> DynamicBitset {
+    friend constexpr DynamicBitset operator^(const DynamicBitset &lhs, const DynamicBitset &rhs) {
         return DynamicBitset(lhs) ^= rhs;
     }
 
-    friend constexpr auto operator<<(const DynamicBitset &value, size_type n) -> DynamicBitset {
+    friend constexpr DynamicBitset operator<<(const DynamicBitset &value, size_type n) {
         return DynamicBitset(value) <<= n;
     }
 
-    friend constexpr auto operator>>(const DynamicBitset &value, size_type n) -> DynamicBitset {
+    friend constexpr DynamicBitset operator>>(const DynamicBitset &value, size_type n) {
         return DynamicBitset(value) >>= n;
     }
 
-    friend constexpr auto operator==(const DynamicBitset &lhs, const DynamicBitset &rhs) -> bool {
+    friend constexpr bool operator==(const DynamicBitset &lhs, const DynamicBitset &rhs) {
         if (lhs.bit_size != rhs.bit_size) {
             return false;
         }
@@ -660,7 +660,7 @@ public:
     }
 
     template <typename Ostream>
-    friend auto operator<<(Ostream &ostream, const DynamicBitset &self) -> Ostream & {
+    friend Ostream &operator<<(Ostream &ostream, const DynamicBitset &self) {
         return ostream << self.to_string();
     }
 
@@ -668,23 +668,23 @@ private:
     std::size_t bit_size;
     std::vector<Block> blocks;
     static constexpr std::size_t digits = std::numeric_limits<Block>::digits;
-    static constexpr auto block_count(std::size_t bit_count) -> std::size_t {
+    static constexpr size_t block_count(std::size_t bit_count) {
         return (bit_count + digits - 1) / digits;
     }
 
-    static constexpr auto block_index(std::size_t pos) -> std::size_t {
+    static constexpr size_t block_index(std::size_t pos) {
         return pos / digits;
     }
 
-    static constexpr auto bit_index(std::size_t pos) -> std::size_t {
+    static constexpr size_t bit_index(std::size_t pos) {
         return pos % digits;
     }
 
-    static constexpr auto bit_mask(std::size_t pos) -> Block {
+    static constexpr Block bit_mask(std::size_t pos) {
         return static_cast<Block>(1) << bit_index(pos);
     }
 
-    constexpr auto sanitize() -> void {
+    constexpr void sanitize() {
         if (bit_size > 0) {
             const std::size_t extra_bits = bit_size % digits;
             if (extra_bits > 0) {
