@@ -20,13 +20,13 @@ namespace Dijkstra {
                 }
                 auto dfs = [&](auto &&self, std::size_t now, auto &&call) -> void {
                     if (now == source) {
-                        call(now);
+                        std::forward<decltype(call)>(call)(now);
                         return;
                     }
-                    self(self, previous[now], call);
-                    call(now);
+                    self(self, previous[now], std::forward<decltype(call)>(call));
+                    std::forward<decltype(call)>(call)(now);
                 };
-                dfs(dfs, end, call);
+                dfs(dfs, end, std::forward<decltype(call)>(call));
                 return true;
             }
 
@@ -106,7 +106,7 @@ namespace Dijkstra {
                     }
                 }
             }
-            
+
             return info<CountType>{.infinity = infinity, .source = source, .distances = distances, .number = number, .previous = previous};
         }
 
