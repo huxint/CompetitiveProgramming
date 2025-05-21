@@ -30,8 +30,4 @@ $Dijkstra$ 需要如果传入抽象类型 $\text{Group}$, 类型要重载比较�
 
 $EratosthenesSieve$ 高度优化，在小于 $10^8$ 下的效率比欧拉筛快近 $3$ 倍
 
-实现了一个动态位集合 的 $C++$ 模板库，欢迎使用。
-
-其实 $\text{Cpp}$ 有一个 $\text{dynamic\_bitset}$，引入头文件 $\text{\text{<tr2/dynamic\_bitset>}}$ 即可
-
 先这样吧，以后再改
