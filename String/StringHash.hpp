@@ -170,8 +170,8 @@ namespace RandomHashing {
     }
 }
 
-constexpr auto base = RandomHashing::generate_prime(100000000000ULL, 10000000000000ULL);
-constexpr auto modular = RandomHashing::generate_prime(100000000000000000ULL, 3000000000000000000ULL);
-constexpr auto Base = std::array<std::uint64_t, 1>{base};
-constexpr auto Modular = std::array<std::uint64_t, 1>{modular};
+constexpr std::uint64_t base = RandomHashing::generate_prime(100000000000ULL, 10000000000000ULL);
+constexpr std::uint64_t modular = RandomHashing::generate_prime(100000000000000000ULL, 3000000000000000000ULL);
+constexpr std::array<std::uint64_t, 1> Base = {base};
+constexpr std::array<std::uint64_t, 1> Modular = {modular};
 using Hashing = StringHash<1, Base, Modular>;
