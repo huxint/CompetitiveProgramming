@@ -6,7 +6,7 @@ class Barrett32 {
 private:
     using u32 = std::uint32_t;
     using u64 = std::uint64_t;
-    using u128 = unsigned __int128;
+    using u128 = __uint128_t;
 
 public:
     constexpr Barrett32(u32 _mod) : modular(_mod), inverse(static_cast<u64>(-1) / _mod + 1) {}

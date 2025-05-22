@@ -1,12 +1,14 @@
 #pragma once
-
-#include <bits/stdc++.h>
+#include <cstdint>
+#include <concepts>
+#include <limits>
+#include <algorithm>
 #include "MillerRabin.hpp"
 
 namespace PollardRho {
-    using u32 = unsigned;
-    using u64 = unsigned long long;
-    using u128 = unsigned __int128;
+    using u32 = std::uint32_t;
+    using u64 = std::uint64_t;
+    using u128 = __uint128_t;
     static constexpr std::size_t C1 = 1;
     static constexpr std::size_t C2 = 2;
     static constexpr std::size_t M = 512;

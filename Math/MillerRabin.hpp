@@ -1,13 +1,14 @@
 #pragma once
-#include <bits/stdc++.h>
+#include <cstdint>
+#include <concepts>
+#include <limits>
+#include <algorithm>
 
 template <std::unsigned_integral T>
 constexpr bool MillerRabin(T value) {
-    using u32 = unsigned;
-    using u64 = unsigned long long;
-    using u128 = unsigned __int128;
+    using u32 = std::uint32_t;
     constexpr auto digits = std::numeric_limits<T>::digits;
-    using long_size = std::conditional_t<(digits < 64), u64, u128>;
+    using long_size = std::conditional_t<(digits < 64), std::uint64_t, __uint128_t>;
 
     if (value < 64) {
         return 0x28208a20a08a28ac >> value & 1;

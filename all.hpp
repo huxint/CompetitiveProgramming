@@ -17,12 +17,12 @@
 #include <iostream>
 #include <algorithm>
 
-using i32 = int;
-using u32 = unsigned;
-using i64 = long long;
-using u64 = unsigned long long;
-constexpr int inf32 = std::numeric_limits<int>::max() / 2;
-constexpr long long inf64 = std::numeric_limits<long long>::max() / 2;
+using i32 = std::int32_t;
+using u32 = std::uint32_t;
+using i64 = std::int64_t;
+using u64 = std::uint64_t;
+constexpr i32 inf32 = std::numeric_limits<i32>::max() / 2;
+constexpr i64 inf64 = std::numeric_limits<i64>::max() / 2;
 
 template <typename... Args>
 bool cmax(auto &value, const Args &...args) {
