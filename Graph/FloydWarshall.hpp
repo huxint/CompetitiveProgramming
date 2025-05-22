@@ -26,14 +26,16 @@ namespace FloydWarshall {
             return adj[i];
         }
 
-        void solve() {
+        [[nodiscard]] std::vector<std::tr2::dynamic_bitset<>> solve() const {
+            auto res = adj;
             for (std::size_t k = 0; k != adj.size(); ++k) {
                 for (std::size_t i = 0; i != adj.size(); ++i) {
-                    if (adj[i][k]) {
-                        adj[i] |= adj[k];
+                    if (res[i][k]) {
+                        res[i] |= res[k];
                     }
                 }
             }
+            return res;
         }
 
     private:

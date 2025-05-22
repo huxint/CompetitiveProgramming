@@ -27,7 +27,7 @@ namespace Dijkstra {
         }
 
         template <bool Path = false, bool Count = false, typename CountType = std::size_t>
-        [[nodiscard]] Info<CountType> solve(std::size_t source, const Group &infinity) const {
+        [[nodiscard]] auto solve(std::size_t source, const Group &infinity) const {
             std::vector<Group> distances;
             std::vector<CountType> number;
             std::vector<std::size_t> previous;
@@ -105,7 +105,7 @@ namespace Dijkstra {
                 }
             };
 
-            return info<CountType>{.infinity = infinity, .source = source, .distances = distances, .number = number, .previous = previous};
+            return info{.infinity = infinity, .source = source, .distances = distances, .number = number, .previous = previous};
         }
 
     private:

@@ -31,7 +31,7 @@ namespace TopologicalSort {
             return _degree[index];
         }
 
-        std::vector<std::size_t> solve() const {
+        [[nodiscard]] std::vector<std::size_t> solve() const {
             std::vector<std::size_t> res;
             std::vector<std::size_t> deg(_degree);
 

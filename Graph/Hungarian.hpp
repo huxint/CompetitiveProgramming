@@ -28,7 +28,7 @@ namespace Hungarian {
             return adj[index];
         }
 
-        auto solve() const {
+        [[nodiscard]] auto solve() const {
             std::size_t max = 0;
             std::tr2::dynamic_bitset<> visited(adj.size());
             std::vector<std::size_t> left_info(adj.size(), none);
