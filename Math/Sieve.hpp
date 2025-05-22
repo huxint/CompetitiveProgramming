@@ -156,7 +156,6 @@ class MobiusSieve {
 public:
     MobiusSieve(size_type max) {
         mobius.assign(max + 1, 0);
-        prefix.assign(max + 1, 0);
         isprime.assign(max + 1, true);
         primes.reserve(size_type(max / std::log(max > 1 ? max : 2)));
         mobius[1] = 1;
@@ -179,9 +178,7 @@ public:
                 }
             }
         }
-        for (size_type i = 1; i < max; ++i) {
-            prefix[i] = prefix[i - 1] + mobius[i];
-        }
+        std::partial_sum(mobius.begin(), mobius.end(), mobius.begin());
     }
 
     auto begin() const {
@@ -192,12 +189,12 @@ public:
         return primes.end();
     }
 
-    std::int8_t query(size_type value) const {
-        return mobius.at(value);
+    std::int32_t query(size_type value) const {
+        return mobius.at(value) - mobius.at(value - 1);
     }
 
     std::int32_t query(size_type l, size_type r) const {
-        return prefix.at(r) - prefix.at(l == 0 ? 0 : l - 1);
+        return mobius.at(r) - mobius.at(l - 1);
     }
 
     bool contains(size_type value) const {
@@ -214,7 +211,6 @@ public:
 
 private:
     std::vector<bool> isprime;
-    std::vector<std::int8_t> mobius;
-    std::vector<std::int32_t> prefix;
+    std::vector<std::int32_t> mobius;
     std::vector<size_type> primes;
 };
