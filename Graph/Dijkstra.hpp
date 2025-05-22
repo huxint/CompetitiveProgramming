@@ -6,39 +6,6 @@
 namespace Dijkstra {
     template <typename Group>
     class Graph {
-    private:
-        template <typename CountType>
-        struct info {
-            Group infinity;
-            std::size_t source;
-            std::vector<Group> distances;
-            std::vector<CountType> number;
-            std::vector<std::size_t> previous;
-            bool trace(std::size_t end, auto &&call) {
-                if (distances[end] >= infinity) {
-                    return false;
-                }
-                auto dfs = [&](auto &&self, std::size_t now, auto &&call) -> void {
-                    if (now == source) {
-                        std::forward<decltype(call)>(call)(now);
-                        return;
-                    }
-                    self(self, previous[now], std::forward<decltype(call)>(call));
-                    std::forward<decltype(call)>(call)(now);
-                };
-                dfs(dfs, end, std::forward<decltype(call)>(call));
-                return true;
-            }
-
-            std::vector<std::size_t> path(std::size_t end) {
-                std::vector<std::size_t> res;
-                trace(end, [&](std::size_t now) -> void {
-                    res.push_back(now);
-                });
-                return res;
-            }
-        };
-
     public:
         Graph(std::size_t vertex) : adj(vertex) {}
 
@@ -106,6 +73,37 @@ namespace Dijkstra {
                     }
                 }
             }
+
+            struct info {
+                Group infinity;
+                std::size_t source;
+                std::vector<Group> distances;
+                std::vector<CountType> number;
+                std::vector<std::size_t> previous;
+                bool trace(std::size_t end, auto &&call) {
+                    if (distances[end] >= infinity) {
+                        return false;
+                    }
+                    auto dfs = [&](auto &&self, std::size_t now, auto &&call) -> void {
+                        if (now == source) {
+                            std::forward<decltype(call)>(call)(now);
+                            return;
+                        }
+                        self(self, previous[now], std::forward<decltype(call)>(call));
+                        std::forward<decltype(call)>(call)(now);
+                    };
+                    dfs(dfs, end, std::forward<decltype(call)>(call));
+                    return true;
+                }
+
+                std::vector<std::size_t> path(std::size_t end) {
+                    std::vector<std::size_t> res;
+                    trace(end, [&](std::size_t now) -> void {
+                        res.push_back(now);
+                    });
+                    return res;
+                }
+            };
 
             return info<CountType>{.infinity = infinity, .source = source, .distances = distances, .number = number, .previous = previous};
         }
