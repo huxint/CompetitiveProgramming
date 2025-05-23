@@ -1,5 +1,4 @@
 #pragma once
-
 #include <array>
 #include <limits>
 #include <vector>
@@ -21,19 +20,7 @@ public:
     }
 
     template <typename Iterator>
-    StringHash(Iterator begin, Iterator end) {
-        init(begin, end);
-    }
-
-    void init(std::string_view str) {
-        init(str.begin(), str.end());
-    }
-
-    template <typename Iterator>
-    void init(Iterator begin, Iterator end) {
-        _size = end - begin;
-        power.resize(size() + 1);
-        table.resize(size() + 1);
+    StringHash(Iterator begin, Iterator end) : _size(end - begin), power(size() + 1), table(size() + 1) {
         std::fill(power[0].begin(), power[0].end(), 1);
         std::fill(table[0].begin(), table[0].end(), 0);
         for (std::size_t i = 0; i < size(); ++i) {
@@ -51,11 +38,11 @@ public:
         return _size;
     }
 
-    hash get() const {
+    hash query() const {
         return table[size()];
     }
 
-    hash get(std::size_t l, std::size_t r) const {
+    hash query(std::size_t l, std::size_t r) const {
         hash res{};
         for (std::size_t i = 0; i < width; ++i) {
             res[i] = table[r + 1][i] - table[l][i] * power[r - l + 1][i] % modular[i];
@@ -67,16 +54,16 @@ public:
     }
 
     friend bool operator==(const StringHash &lhs, const StringHash &rhs) {
-        return lhs.get() == rhs.get();
+        return lhs.query() == rhs.query();
     }
 
     friend std::strong_ordering operator<=>(const StringHash &lhs, const StringHash &rhs) {
-        return lhs.get() <=> rhs.get();
+        return lhs.query() <=> rhs.query();
     }
 
     template <typename Ostream>
     friend Ostream &operator<<(Ostream &ostream, const StringHash &self) {
-        return ostream << self.get();
+        return ostream << self.query();
     }
 
 private:
