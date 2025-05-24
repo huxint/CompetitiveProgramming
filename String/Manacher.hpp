@@ -60,6 +60,10 @@ public:
         return (r - l) % 2 == 0 ? odd[(l + r) / 2] >= (r - l) / 2 : even[(l + r + 1) / 2] > (r - l) / 2;
     }
 
+    std::int32_t max() const {
+        return std::max(*std::max_element(odd.begin(), odd.end()), *std::max_element(even.begin(), even.end()));
+    }
+
     std::int32_t query_odd(std::size_t center) const {
         return odd[center];
     }
