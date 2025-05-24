@@ -61,7 +61,7 @@ public:
     }
 
     std::int32_t max() const {
-        return std::max(*std::max_element(odd.begin(), odd.end()), *std::max_element(even.begin(), even.end()));
+        return std::max(2 * *std::max_element(odd.begin(), odd.end()) + 1, 2 * *std::max_element(even.begin(), even.end()));
     }
 
     std::int32_t query_odd(std::size_t center) const {
