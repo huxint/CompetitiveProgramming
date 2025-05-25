@@ -121,6 +121,16 @@ public:
             }
         }
     }
+    
+    void decompose(size_type value, auto &&call) const {
+        while (value > 1) {
+            auto p = minp(value);
+            while (minp(value) == p) {
+                std::forward<decltype(call)>(call)(p);
+                value /= p;
+            }
+        }
+    }
 
     auto begin() const {
         return primes.begin();

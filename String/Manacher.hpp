@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdint>
 #include <cassert>
+#include <algorithm>
 
 class Manacher {
 public:
