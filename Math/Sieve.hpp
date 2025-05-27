@@ -11,7 +11,7 @@ class EratosthenesSieve {
 public:
     EratosthenesSieve(size_type max = range) {
         visited.flip();
-        primes.reserve(static_cast<size_type>(max / std::log(max)));
+        primes.reserve(static_cast<size_type>(max / (std::log(max) - 1.07)));
         for (size_type i = 3; i * i <= max; i = 2 * visited._Find_next((i - 1) >> 1) + 1) {
             for (size_type j = i * i; j <= max; j += 2 * i) {
                 visited.reset((j - 1) >> 1);
@@ -53,7 +53,7 @@ class PhiSieve {
 public:
     PhiSieve(size_type max) {
         _phi.assign(max + 1, 1);
-        primes.reserve(static_cast<size_type>(max / std::log(max)));
+        primes.reserve(static_cast<size_type>(max / (std::log(max) - 1.07)));
         for (size_type i = 2; i <= max; ++i) {
             if (_phi[i] == 1) {
                 _phi[i] = i - 1;
@@ -106,7 +106,7 @@ class MinPrimeSieve {
 public:
     MinPrimeSieve(size_type max) {
         _minp.assign(max + 1, 0);
-        primes.reserve(static_cast<size_type>(max / std::log(max)));
+        primes.reserve(static_cast<size_type>(max / (std::log(max) - 1.07)));
         for (size_type i = 2; i <= max; ++i) {
             if (_minp[i] == 0) {
                 primes.push_back(_minp[i] = i);
@@ -121,7 +121,7 @@ public:
             }
         }
     }
-    
+
     void decompose(size_type value, auto &&call) const {
         while (value > 1) {
             auto p = minp(value);
@@ -167,7 +167,7 @@ public:
     MobiusSieve(size_type max) {
         mobius.assign(max + 1, 0);
         isprime.assign(max + 1, true);
-        primes.reserve(static_cast<size_type>(max / std::log(max > 1 ? max : 2)));
+        primes.reserve(static_cast<size_type>(max / (std::log(max) - 1.07)));
         mobius[1] = 1;
         isprime[1] = false;
         for (size_type i = 2; i <= max; ++i) {
