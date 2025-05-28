@@ -1,5 +1,4 @@
 #pragma once
-
 #include <cstdint>
 #include <concepts>
 #include <type_traits>
@@ -7,12 +6,12 @@
 template <std::unsigned_integral auto modular, bool prime>
 class ModIntegral {
 private:
-    using type = std::decay_t<decltype(modular)>;
+    using T = std::decay_t<decltype(modular)>;
 
 public:
     constexpr ModIntegral() : _value() {}
 
-    constexpr ModIntegral(std::unsigned_integral auto value) : _value(value >= 0 and value < mod() ? value : value % mod()) {}
+    constexpr ModIntegral(std::unsigned_integral auto value) : _value(value < mod() ? value : value % mod()) {}
 
     constexpr ModIntegral(std::signed_integral auto value) {
         value %= static_cast<decltype(value)>(mod());
@@ -23,11 +22,11 @@ public:
         return _value != 0;
     }
 
-    static constexpr type mod() {
+    static constexpr T mod() {
         return modular;
     }
 
-    constexpr type value() const {
+    constexpr T value() const {
         return _value;
     }
 
@@ -39,8 +38,8 @@ public:
         if constexpr (prime) {
             return power(mod() - 2);
         } else {
-            type u = 0, v = 0, res = 1;
-            for (type x = value(), y = mod(); y != 0; std::swap(x, y), std::swap(res, v)) {
+            T u = 0, v = 0, res = 1;
+            for (T x = value(), y = mod(); y != 0; std::swap(x, y), std::swap(res, v)) {
                 u = x / y, x -= u * y, res -= u * v;
             }
             return ModIntegral(res >= mod() ? res + mod() : res);
@@ -79,7 +78,7 @@ public:
     }
 
     constexpr ModIntegral &operator*=(const ModIntegral &other) {
-        if constexpr (std::numeric_limits<type>::digits < 64) {
+        if constexpr (std::numeric_limits<T>::digits < 64) {
             _value = static_cast<std::uint64_t>(value()) * other.value() % mod();
         } else {
             std::int64_t res = value() * other.value();
@@ -115,7 +114,7 @@ public:
 
     template <typename Istream>
     friend Istream &operator>>(Istream &istream, ModIntegral &self) {
-        type value;
+        T value;
         istream >> value;
         self = value;
         return istream;
@@ -127,5 +126,5 @@ public:
     }
 
 private:
-    type _value;
+    T _value;
 };
