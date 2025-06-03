@@ -3,6 +3,7 @@
 #include <ranges>
 #include <charconv>
 #include <algorithm>
+#include <cstdint>
 
 /**
  * author: huxint
@@ -11,11 +12,6 @@
 template <std::size_t width>
     requires(width > 0 and width < 10)
 class BigInteger {
-private:
-    using u32 = unsigned;
-    using i64 = long long;
-    using u64 = unsigned long long;
-
 protected:
     static constexpr std::size_t karatsuba_width = 6;
     static constexpr std::size_t simple_mulpty_limit = 1024;
@@ -211,29 +207,29 @@ public:
         return *this -= 1;
     }
 
-    constexpr BigInteger operator<<(i64 shift) {
+    constexpr BigInteger operator<<(std::int64_t shift) {
         return BigInteger(*this) <<= shift;
     }
 
-    constexpr BigInteger operator>>(i64 shift) {
+    constexpr BigInteger operator>>(std::int64_t shift) {
         return BigInteger(*this) >>= shift;
     }
 
-    constexpr BigInteger &operator<<=(i64 shift) {
+    constexpr BigInteger &operator<<=(std::int64_t shift) {
         if (shift <= 0) {
             return *this;
         }
-        for (i64 i = 0; i != shift; ++i) {
+        for (std::int64_t i = 0; i != shift; ++i) {
             *this += *this;
         }
         return *this;
     }
 
-    constexpr BigInteger &operator>>=(i64 shift) {
+    constexpr BigInteger &operator>>=(std::int64_t shift) {
         if (shift <= 0) {
             return *this;
         }
-        for (i64 i = 0; i != shift; ++i) {
+        for (std::int64_t i = 0; i != shift; ++i) {
             *this->divby2();
         }
         return *this;
@@ -387,7 +383,7 @@ public:
 
 private:
     int sign;
-    std::vector<u32> digits;
+    std::vector<std::uint32_t> digits;
 
     constexpr std::size_t width_size() const {
         return digits.size();
@@ -460,8 +456,8 @@ private:
         check_zero();
     }
 
-    constexpr std::vector<u32> simple_multiply(const std::vector<u32> &lhs, const std::vector<u32> &rhs) {
-        std::vector<u32> res(lhs.size() + rhs.size());
+    constexpr std::vector<std::uint32_t> simple_multiply(const std::vector<std::uint32_t> &lhs, const std::vector<std::uint32_t> &rhs) {
+        std::vector<std::uint32_t> res(lhs.size() + rhs.size());
         for (std::size_t i = 0; i < lhs.size(); ++i) {
             for (std::size_t j = 0, carry = 0; (lhs[i] != 0 and j < rhs.size()) or carry != 0; ++j) {
                 res[i + j] = (carry += res[i + j] + std::size_t(lhs[i]) * (j < rhs.size() ? rhs[j] : 0)) % base;
@@ -474,8 +470,8 @@ private:
         return res;
     }
 
-    static constexpr std::vector<u32> convert_base(const std::vector<u32> &vector, std::size_t old_width, std::size_t new_width) {
-        std::vector<u32> res;
+    static constexpr std::vector<std::uint32_t> convert_base(const std::vector<std::uint32_t> &vector, std::size_t old_width, std::size_t new_width) {
+        std::vector<std::uint32_t> res;
         std::size_t carry = 0;
         for (std::size_t i = 0, _width = 0; i < vector.size(); ++i) {
             carry += vector[i] * power10[_width];
@@ -491,17 +487,17 @@ private:
         return res;
     }
 
-    constexpr std::vector<u32> karatsuba_multiply(const std::vector<u32> &lhs, const std::vector<u32> &rhs) {
-        std::vector<u32> new_lhs = convert_base(lhs, width, karatsuba_width);
-        std::vector<u32> new_rhs = convert_base(rhs, width, karatsuba_width);
-        std::vector<u64> x(new_lhs.begin(), new_lhs.end());
-        std::vector<u64> y(new_rhs.begin(), new_rhs.end());
+    constexpr std::vector<std::uint32_t> karatsuba_multiply(const std::vector<std::uint32_t> &lhs, const std::vector<std::uint32_t> &rhs) {
+        std::vector<std::uint32_t> new_lhs = convert_base(lhs, width, karatsuba_width);
+        std::vector<std::uint32_t> new_rhs = convert_base(rhs, width, karatsuba_width);
+        std::vector<std::uint64_t> x(new_lhs.begin(), new_lhs.end());
+        std::vector<std::uint64_t> y(new_rhs.begin(), new_rhs.end());
         std::size_t max_bit_ceil = std::bit_ceil(std::max(x.size(), y.size()));
         x.resize(max_bit_ceil);
         y.resize(max_bit_ceil);
-        auto karatsuba = [](auto &&self, const std::vector<u64> &lhs, const std::vector<u64> &rhs) -> std::vector<u64> {
+        auto karatsuba = [](auto &&self, const std::vector<std::uint64_t> &lhs, const std::vector<std::uint64_t> &rhs) -> std::vector<std::uint64_t> {
             std::size_t size = lhs.size();
-            std::vector<u64> res(2 * size);
+            std::vector<std::uint64_t> res(2 * size);
             if (size <= 32) {
                 for (std::size_t i = 0; i < size; ++i) {
                     for (std::size_t j = 0; lhs[i] != 0 and j < size; ++j) {
@@ -511,17 +507,17 @@ private:
                 return res;
             }
             std::size_t split = size / 2;
-            std::vector<u64> lhs_low(lhs.begin(), lhs.begin() + split);
-            std::vector<u64> lhs_high(lhs.begin() + split, lhs.end());
-            std::vector<u64> rhs_low(rhs.begin(), rhs.begin() + split);
-            std::vector<u64> rhs_high(rhs.begin() + split, rhs.end());
-            std::vector<u64> low = self(self, lhs_low, rhs_low);
-            std::vector<u64> high = self(self, lhs_high, rhs_high);
+            std::vector<std::uint64_t> lhs_low(lhs.begin(), lhs.begin() + split);
+            std::vector<std::uint64_t> lhs_high(lhs.begin() + split, lhs.end());
+            std::vector<std::uint64_t> rhs_low(rhs.begin(), rhs.begin() + split);
+            std::vector<std::uint64_t> rhs_high(rhs.begin() + split, rhs.end());
+            std::vector<std::uint64_t> low = self(self, lhs_low, rhs_low);
+            std::vector<std::uint64_t> high = self(self, lhs_high, rhs_high);
             for (std::size_t i = 0; i < split; ++i) {
                 lhs_high[i] += lhs_low[i];
                 rhs_high[i] += rhs_low[i];
             }
-            std::vector<u64> mid = self(self, lhs_high, rhs_high);
+            std::vector<std::uint64_t> mid = self(self, lhs_high, rhs_high);
             for (std::size_t i = 0; i < low.size(); ++i) {
                 mid[i] -= low[i];
                 res[i] += low[i];
@@ -535,8 +531,8 @@ private:
             }
             return res;
         };
-        std::vector<u64> multiply = karatsuba(karatsuba, x, y);
-        std::vector<u32> res(multiply.size());
+        std::vector<std::uint64_t> multiply = karatsuba(karatsuba, x, y);
+        std::vector<std::uint32_t> res(multiply.size());
         for (std::size_t i = 0, carry = 0; i < multiply.size(); ++i) {
             res[i] = (carry += multiply[i]) % new_base;
             carry /= new_base;
