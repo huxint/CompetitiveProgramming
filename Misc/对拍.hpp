@@ -14,7 +14,7 @@ auto range(std::integral auto left, std::integral auto right) {
     return random() % (right - left + 1) + left;
 }
 
-void compare(auto generator, auto solve1, auto solve2, std::size_t test = 100, bool AC = false) {
+void compare(auto generator, auto solve1, auto solve2, std::size_t test = 100, bool flush = false) {
     bool ok = true;
     while (test--) {
         generator(ofs(dir));
@@ -30,7 +30,7 @@ void compare(auto generator, auto solve1, auto solve2, std::size_t test = 100, b
             ok = false;
             break;
         } else {
-            if (AC) {
+            if (flush) {
                 std::cout << "AC" << std::endl;
             }
         }
