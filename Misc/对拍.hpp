@@ -16,7 +16,7 @@ auto range(std::integral auto left, std::integral auto right) {
 
 void compare(auto generator, auto solve1, auto solve2, std::size_t test = 100, bool flush = false) {
     bool ok = true;
-    while (test--) {
+    for (std::size_t i = 0; i < test; ++i) {
         generator(ofs(dir));
         solve1(ifs(dir), ofs(out1));
         solve2(ifs(dir), ofs(out2));
@@ -31,7 +31,7 @@ void compare(auto generator, auto solve1, auto solve2, std::size_t test = 100, b
             break;
         } else {
             if (flush) {
-                std::cout << "AC" << std::endl;
+                std::cout << "test: " << i << " AC!" << std::endl;
             }
         }
     }
