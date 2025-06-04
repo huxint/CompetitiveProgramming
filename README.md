@@ -63,7 +63,7 @@
 ### 对拍
 
 ```cpp
-auto _data = [&](auto cout) {
+auto generator = [&](auto cout) {
     // 生成测试数据
 };
 
@@ -75,7 +75,7 @@ auto solve2 = [&](auto cin, auto cout) {
     // 第二种解法
 };
 
-compare(_data, solve1, solve2, 1000); // 对拍1000组数据
+compare(generator, solve1, solve2, 1000); // 对拍1000组数据
 ```
 
 ### 线段树
