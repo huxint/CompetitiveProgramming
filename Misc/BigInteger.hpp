@@ -112,22 +112,6 @@ public:
         return res;
     }
 
-    constexpr void divby2() {
-        for (std::size_t i = width_size() - 1; i + 1 != 0; --i) {
-            if ((digits[i] & 1) and i != 0) {
-                digits[i - 1] += base;
-            }
-            digits[i] >>= 1;
-        }
-        check_zero();
-    }
-
-    constexpr BigInteger div2() const {
-        BigInteger res(*this);
-        res.divby2();
-        return res;
-    }
-
     constexpr long long to_signed() const {
         return std::stoll(to_string());
     }
@@ -138,7 +122,7 @@ public:
 
     constexpr std::string to_binary(bool reverse = true) const {
         std::string res;
-        for (BigInteger value(*this); not value.zero(); value.divby2()) {
+        for (BigInteger value(*this); value; value /= 2) {
             res += (value.digits.front() & 1) | 0X30;
         }
         if (reverse) {
@@ -292,6 +276,30 @@ public:
         sign = sign * other.sign;
         digits = width_size() * other.width_size() > simple_mulpty_limit ? karatsuba_multiply(digits, other.digits) : simple_multiply(digits, other.digits);
         normalize();
+        return *this;
+    }
+
+    constexpr BigInteger &operator/=(std::int64_t other) {
+        if (other == 2) {
+            for (std::size_t i = width_size() - 1; i + 1 != 0; --i) {
+                if ((digits[i] & 1) and i != 0) {
+                    digits[i - 1] += base;
+                }
+                digits[i] >>= 1;
+            }
+            check_zero();
+        } else {
+            // Todo
+        }
+        return *this;
+    }
+
+    constexpr BigInteger &operator%=(std::int64_t other) {
+        if (other == 2) {
+            return *this = digits.front() & 1;
+        } else {
+            // Todo
+        }
         return *this;
     }
 
