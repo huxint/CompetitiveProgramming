@@ -21,8 +21,8 @@ using i32 = std::int32_t;
 using u32 = std::uint32_t;
 using i64 = std::int64_t;
 using u64 = std::uint64_t;
-constexpr i32 inf32 = std::numeric_limits<i32>::max() / 2;
-constexpr i64 inf64 = std::numeric_limits<i64>::max() / 2;
+constexpr auto inf32 = std::numeric_limits<i32>::max() / 2;
+constexpr auto inf64 = std::numeric_limits<i64>::max() / 2;
 
 template <typename... Args>
 bool cmax(auto &value, const Args &...args) {
