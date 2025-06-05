@@ -16,11 +16,9 @@ protected:
     static constexpr std::size_t karatsuba_width = 6;
     static constexpr std::size_t simple_mulpty_limit = 1024;
     static constexpr std::size_t simple_inverse_limit = 16;
-    static constexpr std::array<std::size_t, 10> power10 = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
-    static constexpr std::size_t base = power10[width];
-    static constexpr std::size_t new_base = power10[karatsuba_width];
-    static constexpr std::string_view hex_chars_lower = "0123456789abcdef";
-    static constexpr std::string_view hex_chars_upper = "0123456789ABCDEF";
+    static constexpr std::array<std::size_t, 10> pow10 = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
+    static constexpr std::size_t base = pow10[width];
+    static constexpr std::size_t karatsuba_base = pow10[karatsuba_width];
 
 public:
     constexpr BigInteger() {
@@ -62,7 +60,7 @@ public:
             digits.push_back(x % base);
             x /= base;
         } while (x != 0);
-        check_zero();
+        normalize();
         return *this;
     }
 
@@ -84,7 +82,7 @@ public:
         for (point += remainder; point != end; point += width) {
             std::from_chars(point, point + width, digits[size--]);
         }
-        check_zero();
+        normalize();
         return *this;
     }
 
@@ -127,17 +125,6 @@ public:
         }
         if (reverse) {
             std::reverse(res.begin(), res.end());
-        }
-        return res;
-    }
-
-    constexpr std::string to_hex(bool upper = false) const {
-        auto &hex_chars(upper ? hex_chars_upper : hex_chars_lower);
-        std::string res;
-        std::string str = to_binary();
-        res.reserve(width_size() / 4);
-        for (auto value : str | std::ranges::views::reverse | std::ranges::views::chunk(4)) {
-            res += hex_chars[8 * (value[3] & 1) + 4 * (value[2] & 1) + 2 * (value[1] & 1) + (value[0] & 1)];
         }
         return res;
     }
@@ -281,7 +268,7 @@ public:
                 }
                 digits[i] >>= 1;
             }
-            check_zero();
+            normalize();
         } else {
             // Todo
         }
@@ -373,7 +360,7 @@ public:
         ostream << self.digits.back();
         for (auto value : self.digits | std::ranges::views::reverse | std::ranges::views::drop(1)) {
             for (std::size_t i = 0; i != width; ++i) {
-                if (value < power10[width - i - 1]) {
+                if (value < pow10[width - i - 1]) {
                     ostream << '0';
                 } else {
                     ostream << value;
@@ -396,15 +383,12 @@ private:
         return width_size() != other.width_size() ? width_size() <=> other.width_size() : std::lexicographical_compare_three_way(digits.rbegin(), digits.rend(), other.digits.rbegin(), other.digits.rend());
     }
 
-    constexpr void check_zero() {
-        if (normalize(); digits.size() == 1 and digits.back() == 0) {
-            sign = 0;
-        }
-    }
-
     constexpr void normalize() {
         while (digits.size() > 1 and digits.back() == 0) {
             digits.pop_back();
+        }
+        if (digits.size() == 1 and digits.back() == 0) {
+            sign = 0;
         }
     }
 
@@ -441,7 +425,7 @@ private:
                 digits[i] -= base;
             }
         }
-        check_zero();
+        normalize();
     }
 
     constexpr void minus_impl(const BigInteger &other) {
@@ -456,7 +440,7 @@ private:
                 *current -= value;
             }
         }
-        check_zero();
+        normalize();
     }
 
     constexpr std::vector<std::uint32_t> simple_multiply(const std::vector<std::uint32_t> &lhs, const std::vector<std::uint32_t> &rhs) {
@@ -477,10 +461,10 @@ private:
         std::vector<std::uint32_t> res;
         std::size_t carry = 0;
         for (std::size_t i = 0, _width = 0; i < vector.size(); ++i) {
-            carry += vector[i] * power10[_width];
+            carry += vector[i] * pow10[_width];
             for (_width += old_width; _width >= new_width; _width -= new_width) {
-                res.push_back(carry % power10[new_width]);
-                carry /= power10[new_width];
+                res.push_back(carry % pow10[new_width]);
+                carry /= pow10[new_width];
             }
         }
         res.push_back(carry);
@@ -491,13 +475,13 @@ private:
     }
 
     constexpr std::vector<std::uint32_t> karatsuba_multiply(const std::vector<std::uint32_t> &lhs, const std::vector<std::uint32_t> &rhs) {
-        std::vector<std::uint32_t> new_lhs = convert_base(lhs, width, karatsuba_width);
-        std::vector<std::uint32_t> new_rhs = convert_base(rhs, width, karatsuba_width);
-        std::vector<std::uint64_t> x(new_lhs.begin(), new_lhs.end());
-        std::vector<std::uint64_t> y(new_rhs.begin(), new_rhs.end());
-        std::size_t max_bit_ceil = std::bit_ceil(std::max(x.size(), y.size()));
-        x.resize(max_bit_ceil);
-        y.resize(max_bit_ceil);
+        std::vector<std::uint32_t> _lhs = convert_base(lhs, width, karatsuba_width);
+        std::vector<std::uint32_t> _rhs = convert_base(rhs, width, karatsuba_width);
+        std::vector<std::uint64_t> x(_lhs.begin(), _lhs.end());
+        std::vector<std::uint64_t> y(_rhs.begin(), _rhs.end());
+        std::size_t max = std::bit_ceil(std::max(x.size(), y.size()));
+        x.resize(max);
+        y.resize(max);
         auto karatsuba = [](auto &&self, const std::vector<std::uint64_t> &lhs, const std::vector<std::uint64_t> &rhs) -> std::vector<std::uint64_t> {
             std::size_t size = lhs.size();
             std::vector<std::uint64_t> res(2 * size);
@@ -537,8 +521,8 @@ private:
         std::vector<std::uint64_t> multiply = karatsuba(karatsuba, x, y);
         std::vector<std::uint32_t> res(multiply.size());
         for (std::size_t i = 0, carry = 0; i < multiply.size(); ++i) {
-            res[i] = (carry += multiply[i]) % new_base;
-            carry /= new_base;
+            res[i] = (carry += multiply[i]) % karatsuba_base;
+            carry /= karatsuba_base;
         }
         return convert_base(res, karatsuba_width, width);
     }
