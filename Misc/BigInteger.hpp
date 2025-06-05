@@ -135,7 +135,7 @@ public:
         if (sign == -1) {
             res += '-';
         }
-        res += std::to_string(at(size() - 1));
+        res += std::to_string(digits.back());
         std::string str;
         for (auto value : digits | std::views::reverse | std::views::drop(1)) {
             str = std::to_string(value);
@@ -374,11 +374,11 @@ private:
     std::vector<std::uint32_t> digits;
 
     constexpr std::uint32_t &at(std::size_t index) {
-        return digits.at(index);
+        return digits[index];
     }
 
     constexpr std::uint32_t at(std::size_t index) const {
-        return digits.at(index);
+        return digits[index];
     }
 
     constexpr std::size_t size() const {
