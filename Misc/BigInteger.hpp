@@ -77,10 +77,10 @@ public:
         auto end = value.data() + value.size();
         std::size_t rem = (value.size() - start) % width;
         if (rem) {
-            std::from_chars(point, point + rem, at(--_size));
+            std::from_chars(point, point + rem, at(_size--));
         }
         for (point += rem; point != end; point += width) {
-            std::from_chars(point, point + width, at(--_size));
+            std::from_chars(point, point + width, at(_size--));
         }
         normalize();
         return *this;
