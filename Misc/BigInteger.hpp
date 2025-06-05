@@ -254,7 +254,7 @@ public:
         if (other.zero()) {
             return *this = other;
         }
-        sign = sign * other.sign;
+        sign *= other.sign;
         digits = size() * other.size() > simple_mulpty_limit ? karatsuba_multiply(digits, other.digits) : simple_multiply(digits, other.digits);
         normalize();
         return *this;
@@ -262,7 +262,7 @@ public:
 
     constexpr BigInteger &operator/=(std::int64_t other) {
         if (other == 2) {
-            for (std::size_t i = size(); i-- != 0;) {
+            for (std::size_t i = size() - 1; i + 1 != 0; --i) {
                 if ((at(i) & 1) and i != 0) {
                     at(i - 1) += base;
                 }
@@ -402,7 +402,7 @@ private:
         std::string lhs = to_binary(false);
         std::string rhs = other.to_binary(false);
         *this = 0;
-        for (std::size_t i = std::max(lhs.size(), rhs.size()); i-- != 0;) {
+        for (std::size_t i = std::max(lhs.size(), rhs.size()) - 1; i + 1 != 0; --i) {
             *this += *this;
             *this += op(i < lhs.size() ? (lhs[i] & 1) : 0, i < rhs.size() ? (rhs[i] & 1) : 0);
         }
@@ -468,7 +468,7 @@ private:
         std::vector<std::uint32_t> res;
         std::uint64_t carry = 0;
         for (std::size_t i = 0, _width = 0; i < vector.size(); ++i) {
-            carry += vector[i] * pow10[_width];
+            carry += std::uint64_t(vector[i]) * pow10[_width];
             for (_width += old_width; _width >= new_width; _width -= new_width) {
                 res.push_back(carry % pow10[new_width]);
                 carry /= pow10[new_width];
@@ -527,7 +527,8 @@ private:
         };
         std::vector<std::uint64_t> multiply = karatsuba(karatsuba, x, y);
         std::vector<std::uint32_t> res(multiply.size());
-        for (std::size_t i = 0, carry = 0; i < multiply.size(); ++i) {
+        std::uint64_t carry = 0;
+        for (std::size_t i = 0; i < multiply.size(); ++i) {
             res[i] = (carry += multiply[i]) % karatsuba_base;
             carry /= karatsuba_base;
         }
