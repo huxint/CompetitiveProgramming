@@ -137,7 +137,7 @@ public:
         std::string str = to_binary();
         res.reserve(width_size() / 4);
         for (auto value : str | std::ranges::views::reverse | std::ranges::views::chunk(4)) {
-            res += hex_chars[(value[3] & 1) * 8 + (value[2] & 1) * 4 + (value[1] & 1) * 2 + (value[0] & 1)];
+            res += hex_chars[8 * (value[3] & 1) + 4 * (value[2] & 1) + 2 * (value[1] & 1) + (value[0] & 1)];
         }
         return res;
     }
@@ -214,27 +214,21 @@ public:
             return *this;
         }
         for (std::int64_t i = 0; i != shift; ++i) {
-            *this->divby2();
+            *this /= 2;
         }
         return *this;
     }
 
     constexpr BigInteger &operator&=(const BigInteger &other) {
-        return binary_op_helper(other, [](int lhs, int rhs) -> int {
-            return lhs & rhs;
-        });
+        return binary_op_helper(other, std::bit_and<>());
     }
 
     constexpr BigInteger &operator|=(const BigInteger &other) {
-        return binary_op_helper(other, [](int lhs, int rhs) -> int {
-            return lhs | rhs;
-        });
+        return binary_op_helper(other, std::bit_or<>());
     }
 
     constexpr BigInteger &operator^=(const BigInteger &other) {
-        return binary_op_helper(other, [](int lhs, int rhs) -> int {
-            return lhs ^ rhs;
-        });
+        return binary_op_helper(other, std::bit_xor<>());
     }
 
     constexpr BigInteger &operator+=(const BigInteger &other) {
@@ -296,7 +290,8 @@ public:
 
     constexpr BigInteger &operator%=(std::int64_t other) {
         if (other == 2) {
-            return *this = digits.front() & 1;
+            digits.erase(digits.begin() + 1, digits.end());
+            digits.front() &= 1;
         } else {
             // Todo
         }
