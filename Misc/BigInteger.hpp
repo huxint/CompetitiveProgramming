@@ -256,9 +256,16 @@ public:
         return *this;
     }
 
-    constexpr BigInteger &operator/=(std::int64_t other) {
-        if (other == 2) {
-            for (std::size_t i = size() - 1; i + 1 != 0; --i) {
+    constexpr BigInteger &operator/=(std::integral auto other) {
+        if (other < 0) {
+            sign = -sign;
+            other = -other;
+        }
+
+        if (other == 1 or sign == 0) {
+            return *this;
+        } else if (other == 2) {
+            for (std::size_t i = size(); i-- != 0;) {
                 if (at(i) % 2 == 1 and i != 0) {
                     at(i - 1) += base;
                 }
@@ -271,7 +278,7 @@ public:
         return *this;
     }
 
-    constexpr BigInteger &operator%=(std::int64_t other) {
+    constexpr BigInteger &operator%=(std::integral auto other) {
         if (other == 2) {
             digits.erase(digits.begin() + 1, digits.end());
             at(0) &= 1;
@@ -397,7 +404,7 @@ private:
         std::string lhs = to_binary(false);
         std::string rhs = other.to_binary(false);
         *this = 0;
-        for (std::size_t i = std::max(lhs.size(), rhs.size()) - 1; i + 1 != 0; --i) {
+        for (std::size_t i = std::max(lhs.size(), rhs.size()); i-- != 0;) {
             *this += *this;
             *this += op(i < lhs.size() ? (lhs[i] & 1) : 0, i < rhs.size() ? (rhs[i] & 1) : 0);
         }
