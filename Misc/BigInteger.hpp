@@ -87,11 +87,7 @@ public:
     }
 
     explicit operator bool() const {
-        return not zero();
-    }
-
-    constexpr bool zero() const {
-        return sign == 0;
+        return sign != 0;
     }
 
     constexpr BigInteger power(std::size_t exp) const {
@@ -158,13 +154,13 @@ public:
         return res;
     }
 
-    constexpr BigInteger operator++(int) {
+    constexpr BigInteger operator++(std::int32_t) {
         BigInteger res(*this);
         ++*this;
         return res;
     }
 
-    constexpr BigInteger operator--(int) {
+    constexpr BigInteger operator--(std::int32_t) {
         BigInteger res(*this);
         --*this;
         return res;
@@ -248,10 +244,10 @@ public:
     }
 
     constexpr BigInteger &operator*=(const BigInteger &other) {
-        if (zero()) {
+        if (sign == 0) {
             return *this;
         }
-        if (other.zero()) {
+        if (other.sign == 0) {
             return *this = other;
         }
         sign *= other.sign;
@@ -263,7 +259,7 @@ public:
     constexpr BigInteger &operator/=(std::int64_t other) {
         if (other == 2) {
             for (std::size_t i = size() - 1; i + 1 != 0; --i) {
-                if ((at(i) & 1) and i != 0) {
+                if (at(i) % 2 == 1 and i != 0) {
                     at(i - 1) += base;
                 }
                 at(i) >>= 1;
@@ -328,17 +324,16 @@ public:
     friend constexpr bool operator==(const BigInteger &lhs, const BigInteger &rhs) {
         if (lhs.sign != rhs.sign) {
             return false;
+        } else {
+            return lhs.digits == rhs.digits;
         }
-        return lhs.digits == rhs.digits;
     }
 
     friend constexpr std::strong_ordering operator<=>(const BigInteger &lhs, const BigInteger &rhs) {
         if (lhs.sign != rhs.sign) {
             return lhs.sign <=> rhs.sign;
-        } else if (lhs) {
-            return std::strong_ordering::equal;
         } else {
-            return lhs.sign == 1 ? lhs.compare_abs(rhs) : rhs.compare_abs(lhs);
+            return lhs.sign == 0 ? std::strong_ordering::equal : lhs.sign == 1 ? lhs.compare_abs(rhs) : rhs.compare_abs(lhs);
         }
     }
 
@@ -370,7 +365,7 @@ public:
     }
 
 private:
-    int sign;
+    std::int32_t sign;
     std::vector<std::uint32_t> digits;
 
     constexpr std::uint32_t &at(std::size_t index) {
