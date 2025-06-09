@@ -160,33 +160,6 @@ auto result = max_tree.prod(l, r);  // 区间查询
 auto pos = max_tree.max_right(l, [&](int x) { return x <= threshold; });
 ```
 
-#### 🗂️ 懒标记线段树
-
-```cpp
-#include "DS/LazySegmentTree.hpp"
-
-// 区间加法 + 区间和查询
-struct Node {
-    long long sum, size;
-    Node(long long s = 0, long long sz = 1) : sum(s), size(sz) {}
-    Node operator+(const Node& other) const {
-        return Node(sum + other.sum, size + other.size);
-    }
-};
-
-struct Tag {
-    long long add = 0;
-    Tag operator+(const Tag& other) const { return Tag{add + other.add}; }
-    Node operator()(const Node& node) const {
-        return Node(node.sum + add * node.size, node.size);
-    }
-};
-
-LazySegmentTree<Node, Tag> lazy_tree(n);
-lazy_tree.apply(l, r, Tag{x});  // 区间加x
-auto sum = lazy_tree.prod(l, r).sum;  // 区间和查询
-```
-
 #### 🌐 泛型Dijkstra算法
 
 ```cpp
