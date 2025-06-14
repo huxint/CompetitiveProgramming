@@ -166,9 +166,7 @@ public:
         return res;
     }
 
-    friend constexpr bool operator==(const Matrix &lhs, const Matrix &rhs) {
-        return lhs.matrix == rhs.matrix;
-    }
+    friend constexpr bool operator==(const Matrix &, const Matrix &) = default;
 
     template <typename Ostream>
     friend Ostream &operator<<(Ostream &ostream, const Matrix &value) {
