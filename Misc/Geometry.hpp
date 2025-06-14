@@ -144,16 +144,9 @@ namespace Geometry {
             return Point(rhs) /= lhs;
         }
 
-        friend constexpr auto operator==(const Point &lhs, const Point &rhs) -> bool {
-            return lhs.x() == rhs.x() and lhs.y() == rhs.y();
-        }
+        friend constexpr bool operator==(const Point &, const Point &) = default;
 
-        friend std::partial_ordering operator<=>(const Point &lhs, const Point &rhs) {
-            if (auto cmp = lhs.x() <=> rhs.x(); cmp != 0) {
-                return cmp;
-            }
-            return lhs.y() <=> rhs.y();
-        }
+        friend auto operator<=>(const Point &, const Point &) = default;
 
         template <typename Istream>
         friend Istream &operator>>(Istream &istream, Point &self) {
