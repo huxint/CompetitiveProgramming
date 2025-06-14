@@ -99,7 +99,9 @@
 # 克隆仓库
 git clone https://github.com/huxint/CompetitiveProgramming.git
 cd CompetitiveProgramming
+```
 
+```cpp
 # 包含所有模块
 #include "all.hpp"
 
@@ -142,22 +144,37 @@ compare(generator, solve_bruteforce, solve_optimized, 1000);
 #### 🌳 抽象线段树
 
 ```cpp
-#include "DS/SegmentTree.hpp"
-
 // 区间最大值查询
-auto max_op = [](int a, int b) { return std::max(a, b); };
-auto max_e = []() { return 0; };
-SegmentTree<int, max_op, max_e> max_tree(n);
+std::vector<int> a{1, 2, 3, 4, 5};
+auto e = []() {
+    return std::numeric_limits<int>::min();
+};
+SegmentTree<int, std::ranges::max, e> seg(a.begin(), a.end());
+```
 
+```cpp
 // 区间和查询
-auto sum_op = [](long long a, long long b) { return a + b; };
-auto sum_e = []() { return 0LL; };
-SegmentTree<long long, sum_op, sum_e> sum_tree(arr);
+std::vector<int> a{1, 2, 3, 4, 5};
+auto e = []() {
+    return 0LL;
+};
+SegmentTree<std::int64_t, std::plus<>(), e> seg(a.begin(), a.end());
+```
 
-// 使用示例
-max_tree.set(pos, value);           // 单点修改
-auto result = max_tree.prod(l, r);  // 区间查询
-auto pos = max_tree.max_right(l, [&](int x) { return x <= threshold; });
+```cpp
+// 直接读入就放到线段树里面
+int n = 10;
+auto op = [&](int a, int b) -> int {
+    return a ^ b;
+};
+auto e = [&]() -> int {
+    return 0;
+};
+SegmentTree<int, op, e> seg(n, [&](auto ...) {
+    int x;
+    std::cin >> x;
+    return x;
+});
 ```
 
 #### 🌐 泛型Dijkstra算法
@@ -166,24 +183,59 @@ auto pos = max_tree.max_right(l, [&](int x) { return x <= threshold; });
 #include "Graph/Dijkstra.hpp"
 
 // 基础用法
-Dijkstra::Graph<int> graph(n);
-graph.add_edge(u, v, weight);
+Dijkstra::Graph<int> adj(n);
+adj.add_edge(u, v, weight);
+
+int start = 0, target = n - 1;
 
 // 只计算距离
-auto result1 = graph.solve(start, INF);
-cout << result1.distances[target] << '\n';
+auto res = adj.solve(start, std::numeric_limits<int>::max());
+std::cout << res.distances[target] << '\n';
+```
 
+```cpp
 // 计算距离 + 路径追踪
-auto result2 = graph.solve<true>(start, INF);
-auto path = result2.path(target);
+auto res = adj.solve<true>(start, std::numeric_limits<int>::max());
+auto path = res.path(target);
+```
 
+```cpp
 // 计算距离 + 路径数量
-auto result3 = graph.solve<false, true>(start, INF);
-cout << result3.number[target] << '\n';
+auto res = adj.solve<false, true>(start, std::numeric_limits<int>::max());
+cout << res.number[target] << '\n';
+```
 
+```cpp
 // 完整功能：距离 + 路径 + 计数
-auto result4 = graph.solve<true, true>(start, INF);
-result4.trace(target, [](int node) { cout << node << " "; });
+auto res = adj.solve<true, true>(start, std::numeric_limits<int>::max());
+res.trace(target, [](auto u) {
+    std::cout << u << ' ';
+});
+```
+
+我们还可以重载比较函数和 `inf` 实现较为广义的最短路。如 `2025 天梯赛的最短路`
+```cpp
+struct node {
+    int x, y;
+    node() : x(0), y(0) {}
+    node(int x_, int y_) : x(x_), y(y_) {}
+
+    node operator+(const node &rhs) const {
+        return node(x + rhs.x, y + rhs.y);
+    }
+
+    friend std::strong_ordering operator<=>(const node &lhs, const node &rhs) {
+        if (lhs.x != rhs.x) {
+            return lhs.x <=> rhs.x;
+        }
+        return rhs.y <=> lhs.y;
+    }
+};
+```
+
+以及对应的 `inf`
+```cpp
+auto inf = node(0x3f3f3f3f, 0);
 ```
 
 #### 🔢 高性能质数筛
@@ -194,19 +246,26 @@ result4.trace(target, [](int node) { cout << node << " "; });
 // 埃氏筛 - 10^8范围内最快
 EratosthenesSieve<10000000> sieve;
 for (auto prime : sieve) {
-    cout << prime << " ";
+    std::cout << prime << " ";
 }
-cout << "质数个数: " << sieve.size() << '\n';
-cout << "第100个质数: " << sieve.kth(99) << '\n';
-cout << "997是质数吗: " << sieve.contains(997) << '\n';
+std::cout << "质数个数: " << sieve.size() << '\n';
+std::cout << "第100个质数: " << sieve.kth(99) << '\n';
+std::cout << "997是质数吗: " << sieve.contains(997) << '\n';
+```
 
+```cpp
 // 欧拉筛 + 欧拉函数
-PhiSieve phi_sieve(1000000);
-cout << "φ(100) = " << phi_sieve.phi(100) << '\n';
+PhiSieve sieve(1000000);
+std::cout << "φ(100) = " << sieve.phi(100) << '\n';
+```
 
+```cpp
 // 最小质因子筛 + 快速分解
-MinPrimeSieve min_sieve(1000000);
-min_sieve.decompose(360, [](int p) { cout << p << " "; }); // 输出: 2 2 2 3 3 5
+MinPrimeSieve sieve(1000000);
+sieve.decompose(360, [](auto p) {
+    std::cout << p << ' ';
+});// 枚举分解的质因子
+// 输出: 2 2 2 3 3 5
 ```
 
 #### ⏱️ 性能测试
@@ -234,90 +293,6 @@ PRINT_TIMER_RESULTS();  // 输出统计结果
 - **算法优化**: 采用最新的算法优化技术
 - **内存友好**: 紧凑的内存布局和缓存友好的访问模式
 - **编译优化**: 充分利用编译器优化能力
-
-### 🔧 易用性
-- **统一接口**: 相似功能的模块采用一致的API设计
-- **类型安全**: 利用C++20的concepts进行编译时检查
-- **错误友好**: 清晰的错误信息和边界检查
-
-## 📊 性能对比
-
-| 算法 | 本库实现 | 标准实现 | 性能提升 |
-|------|----------|----------|----------|
-| 埃氏筛(10⁸) | 2.1s | 6.8s | **3.2x** |
-| 线段树查询 | 0.8ns | 1.2ns | **1.5x** |
-| Dijkstra | 与std::priority_queue相当 | - | **相当** |
-
-## 🛠️ 开发环境
-
-### 📋 系统要求
-- **编译器**: GCC 10+ / Clang 12+ / MSVC 2022+
-- **标准**: C++20
-- **平台**: Windows / Linux / macOS
-
-### 🔧 编译选项
-```bash
-g++ -std=c++20 -O2 -Wall -Wextra solution.cpp
-```
-
-### 📚 依赖项
-- 标准库 (无外部依赖)
-- 部分模块使用 `<tr2/dynamic_bitset>` (GCC扩展)
-
-## 📖 学习资源
-
-### 🎓 推荐学习路径
-1. **基础数据结构**: 线段树 → 树状数组 → 并查集
-2. **图论算法**: Dijkstra → Floyd → 拓扑排序
-3. **数学算法**: 质数筛 → 快速幂 → 组合数学
-4. **高级技巧**: 懒标记 → 可持久化 → 分块
-
-### 📚 参考资料
-- [OI Wiki](https://oi-wiki.org/) - 算法竞赛知识整合
-- [Codeforces](https://codeforces.com/) - 在线练习平台
-- [AtCoder Library](https://github.com/atcoder/ac-library) - 官方算法库
-
-## 🤝 贡献指南
-
-### 🐛 问题反馈
-- 发现bug请提交 [Issue](https://github.com/huxint/CompetitiveProgramming/issues)
-- 包含复现步骤和环境信息
-
-### 💡 功能建议
-- 新算法实现建议
-- 性能优化建议
-- 接口改进建议
-
-### 🔧 代码贡献
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
-### 📝 代码规范
-- 遵循现有代码风格
-- 添加必要的注释和文档
-- 确保所有测试通过
-- 性能关键代码需要benchmark
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
-
-## 🙏 致谢
-
-- 感谢所有为算法竞赛社区做出贡献的开发者
-- 特别感谢 [AtCoder Library](https://github.com/atcoder/ac-library) 的设计启发
-- 感谢各大OJ平台提供的测试环境
-
-## 📞 联系方式
-
-- **作者**: huxint
-- **邮箱**: [1348168485@qq.com](mailto:1348168485@qq.com)
-- **GitHub**: [@huxint](https://github.com/huxint)
-
----
 
 <div align="center">
 
