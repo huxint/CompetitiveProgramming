@@ -2,8 +2,6 @@
 #include <cstdint>
 #include <concepts>
 #include <limits>
-#include <array>
-#include <vector>
 
 auto power(auto base, std::size_t exp) {
     decltype(base) res(1);
