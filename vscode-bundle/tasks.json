@@ -1,0 +1,15 @@
+{
+    "tasks": [
+        {
+            "label": "Bundle",
+            "command": "e:\\python\\python.exe", // 你的python路径
+            "args": [
+                "e:\\huxint\\Bundle\\bundler.py", // 你把bundler.py放在哪里就填哪里
+                "-i",
+                "${file}",
+                "-c",
+                "-ahuxint" //-a你的名字
+            ]
+        }
+    ]
+}
