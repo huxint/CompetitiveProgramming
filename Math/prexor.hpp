@@ -1,3 +1,4 @@
+#pragma once
 #include <cstdint>
 
 std::uint64_t prexor(std::uint64_t x) {
