@@ -84,7 +84,7 @@ namespace RandomHashing {
         return shifted;
     }
 
-#include "Math/MillerRabin.hpp"
+#include "../Math/MillerRabin.hpp"
 
     constexpr std::size_t generate_prime(std::size_t left, std::size_t right) {
         auto shifted = seed();
