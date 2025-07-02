@@ -5,6 +5,7 @@
  */
 #define DEBUG_SHOW_TIMESTAMP 0  // 不打印时间戳
 #define DEBUG_SHOW_LOCATION 0  // 不显示代码文件名和行号
+#define DEBUG_OUTPUT std::cerr << // 默认就是 std::cerr, 可以修改为 std::cout
 
  //
  // debug.hpp - prints everything!
