@@ -307,7 +307,7 @@ if lastDirSepPos != -1:
 else:
     inputFileName = inputFilePath
 #now scan the file
-with open(inputFileName, 'r') as inputFile:
+with open(inputFileName, 'r', encoding='utf-8') as inputFile:
     result = scan(inputFile)
 
 # 添加头部信息
@@ -327,6 +327,6 @@ if useClipboard:
 
 # 输出到文件或标准输出
 if outputFilePath is not None:
-    with open(outputFilePath, 'w') as outFile:
+    with open(outputFilePath, 'w', encoding='utf-8') as outFile:
         outFile.write(result)
     print(f"Bundled code saved to {outputFilePath}")
