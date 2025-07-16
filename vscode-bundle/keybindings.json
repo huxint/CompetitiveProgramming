@@ -4,5 +4,11 @@
         "command": "workbench.action.tasks.runTask",
         "args": "Bundle",
         "when": "editorLangId == cpp || editorLangId == c || editorLangId == hpp || editorLangId == h"
+    },
+    {
+        "key": "ctrl+shift+enter",
+        "command": "workbench.action.tasks.runTask",
+        "args": "cpp: build-run-clean",
+        "when": "editorLangId == cpp || editorLangId == c"
     }
 ]

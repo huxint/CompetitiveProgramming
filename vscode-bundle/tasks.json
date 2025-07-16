@@ -10,6 +10,51 @@
                 "-c",
                 "-ahuxint" //-a你的名字
             ]
+        },
+        {
+            "label": "cpp: build exe",
+            "type": "process",
+            "command": "g++",
+            "args": [
+                "-std=c++23",
+                "-O2",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "cpp: run exe",
+            "type": "process",
+            "command": "${fileDirname}\\${fileBasenameNoExtension}.exe"
+        },
+        {
+            "label": "cpp: clean exe",
+            "type": "process",
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "del",
+                "/q",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ]
+        },
+        {
+            "label": "cpp: build-run-clean",
+            "dependsOn": [
+                "cpp: build exe",
+                "cpp: run exe",
+                "cpp: clean exe"
+            ],
+            "dependsOrder": "sequence", // 按顺序
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
