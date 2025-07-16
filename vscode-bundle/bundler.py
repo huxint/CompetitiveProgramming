@@ -109,7 +109,7 @@ def processInclude(line):
             os.chdir(includePath)
         else:
             includeFileName = includeFilePath
-        with open(includeFileName, 'r') as subFile:
+        with open(includeFileName, 'r', encoding='utf-8') as subFile:
             subFileContents = scan(subFile)
             fileContents += '%s%s' % (subFileContents, '\n' if len(subFileContents) > 0 else '')
         #now get the corresponding .cpp, unless it was for some reason the actual include above, or the cli flag --no-source is set
