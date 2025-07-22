@@ -10,6 +10,7 @@
 template <std::size_t width, std::array<std::uint64_t, width> base, std::array<std::uint64_t, width> modular>
 class StringHash {
 private:
+    using u128 = unsigned __int128;
     using hash = std::array<std::uint64_t, width>;
 
 public:
@@ -23,8 +24,8 @@ public:
         std::fill(table[0].begin(), table[0].end(), 0);
         for (std::size_t i = 0; i < size(); ++i) {
             for (std::size_t j = 0; j < width; ++j) {
-                power[i + 1][j] = power[i][j] * base[j] % modular[j];
-                table[i + 1][j] = table[i][j] * base[j] % modular[j] + *begin++;
+                power[i + 1][j] = multiply(power[i][j], base[j], j);
+                table[i + 1][j] = multiply(table[i][j], base[j], j) + *begin++;
                 if (table[i + 1][j] >= modular[j]) {
                     table[i + 1][j] -= modular[j];
                 }
@@ -43,7 +44,7 @@ public:
     hash query(std::size_t l, std::size_t r) const {
         hash res{};
         for (std::size_t i = 0; i < width; ++i) {
-            res[i] = table[r + 1][i] - table[l][i] * power[r - l + 1][i] % modular[i];
+            res[i] = table[r + 1][i] - multiply(table[l][i], power[r - l + 1][i], i);
             if (res[i] >= modular[i]) {
                 res[i] += modular[i];
             }
@@ -68,6 +69,12 @@ private:
     std::size_t _size;
     std::vector<hash> power;
     std::vector<hash> table;
+
+    std::int64_t multiply(std::uint64_t lhs, std::uint64_t rhs, std::size_t i) const {
+        std::int64_t res = lhs * rhs;
+        res -= static_cast<std::uint64_t>(static_cast<long double>(lhs) * rhs / modular[i]) * modular[i];
+        return res < 0 ? res + modular[i] : res >= modular[i] ? res - modular[i] : res;
+    }
 };
 
 namespace RandomHashing {
