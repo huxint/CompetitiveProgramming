@@ -15,9 +15,7 @@ private:
 public:
     StringHash() {}
 
-    StringHash(std::string_view str) {
-        init(str.begin(), str.end());
-    }
+    StringHash(std::string_view str) : StringHash(str.begin(), str.end()) {}
 
     template <typename Iterator>
     StringHash(Iterator begin, Iterator end) : _size(end - begin), power(size() + 1), table(size() + 1) {
