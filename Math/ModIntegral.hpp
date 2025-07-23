@@ -3,6 +3,26 @@
 #include <concepts>
 #include <type_traits>
 
+/*
+取模整数类
+如果模数是 32 位范围的，using modint = ModIntegral<998244353U, true>
+如果模数是 64 位范围的，using modint = ModIntegral<998244353ULL, false>
+
+用 U 和 ULL 可以让编译器清楚是32位还是64位
+
+后面的布尔值代表 mod 是否是质数，用于让求逆元时使用费马小定理还是扩展欧几里得
+
+mod 必须是编译期已知，比如题面上的1000000007, 998244353等等
+而不是根据输入来的 mod
+
+支持取模、取逆、幂运算、比较运算
+
+支持四则运算
+
+支持输入输出
+
+支持隐式转换为 bool
+*/
 template <std::unsigned_integral auto modular, bool prime>
 class ModIntegral {
 private:

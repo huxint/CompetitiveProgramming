@@ -2,6 +2,15 @@
 #include <algorithm>
 #include <cstdint>
 
+/*
+Barrett 算法，用于优化非编译期模数的取模运算
+
+目前只支持 32 位
+
+支持设置模数
+
+支持乘法
+*/
 class Barrett32 {
 private:
     using u32 = std::uint32_t;

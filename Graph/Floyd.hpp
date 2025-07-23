@@ -1,6 +1,19 @@
 #pragma once
 #include <vector>
 
+/*
+一般都用 Dijkstra 了，Floyd 几乎不需要用到
+
+Floyd::Graph<int> adj(5);
+adj.add_edge(0, 1, 1);
+adj.add_edge(0, 2, 2);
+adj.add_edge(1, 2, 3);
+adj.add_edge(1, 3, 4);
+adj.add_edge(2, 3, 5);
+adj.add_edge(3, 4, 6);
+auto res = adj.solve(起点，std::numeric_limits<int>::max());
+res 就是distances数组了
+*/
 namespace Floyd {
     template <typename Group>
     class Graph {

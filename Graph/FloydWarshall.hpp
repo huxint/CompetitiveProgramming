@@ -1,8 +1,10 @@
 #pragma once
-
 #include <tr2/dynamic_bitset>
 #include <vector>
 
+/*
+bitset 版的传递闭包
+*/
 namespace FloydWarshall {
     /* Floyd Warshall Algorithm 传递闭包 */
     class Graph {

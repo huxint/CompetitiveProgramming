@@ -7,6 +7,15 @@
 #include <algorithm>
 #include <string_view>
 
+/*
+哈希，配合 MillerRabin 可以实现随机编译期质数
+
+也可以手动设置
+
+哈希支持迭代器构造，支持字符串构造
+
+迭代器构造即支持数字容器的哈希
+*/
 template <std::size_t width, std::array<std::uint64_t, width> base, std::array<std::uint64_t, width> modular>
 class StringHash {
 private:

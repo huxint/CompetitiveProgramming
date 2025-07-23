@@ -3,6 +3,29 @@
 #include <vector>
 #include <tr2/dynamic_bitset>
 
+/*
+Dijkstra 最短路
+支持路径记录、路径计数、最短路计数
+复杂的信息用 struct 可以自行重载比较运算实现想要的功能
+
+Dijkstra::Graph<int> adj(5);
+adj.add_edge(0, 1, 1);
+adj.add_edge(0, 2, 2);
+adj.add_edge(1, 2, 3);
+adj.add_edge(1, 3, 4);
+adj.add_edge(2, 3, 5);
+adj.add_edge(3, 4, 6);
+
+adj.solve(起点, std::numeric_limits<int>::max());
+
+adj.solve<true>(起点, std::numeric_limits<int>::max());
+
+adj.solve<false, true>(起点, std::numeric_limits<int>::max());
+
+adj.solve<true, true>(起点, std::numeric_limits<int>::max());
+
+adj.solve<true, true, modint>(起点, std::numeric_limits<int>::max()); // 路径计数使用取模类
+*/
 namespace Dijkstra {
     template <typename Group>
     class Graph {

@@ -2,6 +2,10 @@
 #include <vector>
 #include <numeric>
 
+/*
+可撤销并查集
+extract将某个点移除
+*/
 class ErasableDisjointSetUnion {
 public:
     ErasableDisjointSetUnion(std::size_t n) : max(n), group(n) {

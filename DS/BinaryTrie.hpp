@@ -5,6 +5,10 @@
 #include <utility>
 #include <algorithm>
 
+/*
+01字典树
+支持插入（多个），移除（多个），计数，最大最小查询，枚举，输出
+*/
 template <std::unsigned_integral Key, typename T = std::size_t, std::size_t width = std::numeric_limits<Key>::digits>
 class BinaryTrie {
 private:

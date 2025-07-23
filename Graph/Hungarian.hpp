@@ -4,6 +4,9 @@
 
 /*
 二分图最大匹配
+max 就是最大匹配
+left_info 是左边匹配的信息
+right_info 是右边匹配的信息
 */
 namespace Hungarian {
     constexpr std::size_t none = -1;

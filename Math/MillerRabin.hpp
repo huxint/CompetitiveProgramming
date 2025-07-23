@@ -4,6 +4,10 @@
 #include <limits>
 #include <algorithm>
 
+/*
+高效的质数判断
+就一个功能，判断超级大的数是不是质数
+*/
 template <std::unsigned_integral T>
 constexpr bool MillerRabin(T value) {
     using u32 = std::uint32_t;

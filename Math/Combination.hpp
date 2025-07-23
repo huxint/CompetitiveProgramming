@@ -4,6 +4,16 @@
 #include <numeric>
 #include <algorithm>
 
+/*
+组合数，需要配合 取模类
+
+Combination<ModIntegral<998244353U, true>> comb;
+
+直接用 comb.combination(n, m) 即可
+即可完成不需要你手动初始化
+
+支持求阶乘、逆阶乘、组合数、排列数、卡特兰数、多重排列、圆排列、圆排列（带环）、错排、非相邻组合、卢卡斯定理
+*/
 template <typename Base>
     requires requires (Base object) {
     object.mod();
