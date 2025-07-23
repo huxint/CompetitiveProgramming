@@ -7,16 +7,19 @@ public:
     Discretizer() : _prepared{}, discretizer{} {}
 
     Discretizer(std::ranges::range auto container) : Discretizer() {
-        discretizer.insert(discretizer.end(), container.begin(), container.end());
+        discretizer.reserve(container.size());
+        std::copy(container.begin(), container.end(), std::back_inserter(discretizer));
     }
 
     template <typename Iterator>
-    Discretizer(Iterator begin, Iterator end) : Discretizer(end - begin, [&](auto index) {
-        return *(begin + index);
-    }) {}
+    Discretizer(Iterator begin, Iterator end) : Discretizer() {
+        discretizer.reserve(end - begin);
+        std::copy(begin, end, std::back_inserter(discretizer));
+    }
 
-    Discretizer(std::size_t n, auto &&mapping) : Discretizer() {
-        for (std::size_t i = 0; i < n; ++i) {
+    Discretizer(std::size_t size, auto &&mapping) : Discretizer() {
+        discretizer.reserve(size);
+        for (std::size_t i = 0; i < size; ++i) {
             discretizer.push_back(std::forward<decltype(mapping)>(mapping)(i));
         }
     }
@@ -38,10 +41,6 @@ public:
 
     std::size_t size() const {
         return discretizer.size();
-    }
-
-    const T &operator[](std::size_t index) const {
-        return discretizer.at(index);
     }
 
     void prepare() {
