@@ -1,6 +1,17 @@
 #pragma once
 #include <bits/stdc++.h>
 
+/*
+线段树
+模仿 atcoder 板子实现
+重构了一下整个类
+
+支持各种初始化
+
+支持二分
+
+区间均为闭区间，0index
+*/
 template <typename Info, auto op, auto e>
 class SegmentTree {
 private:

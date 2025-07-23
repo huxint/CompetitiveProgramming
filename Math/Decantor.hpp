@@ -4,6 +4,11 @@
 #include <iterator>
 #include <vector>
 
+/*
+逆康托展开
+求一个序列中的第 k 小的序列， k 从 0 开始
+若 k 大于总排列数，则返回空序列
+*/
 template <typename Iterator, typename T = typename std::iterator_traits<Iterator>::value_type>
 std::vector<T> decantor(Iterator begin, Iterator end, std::uint64_t k) {
     std::vector<T> container;

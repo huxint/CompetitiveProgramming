@@ -5,6 +5,20 @@
 #include <cstdint>
 #include <numeric>
 
+/*
+各种筛法
+EratosthenesSieve<最大范围> 只筛质数最快
+MinPrimeSieve 一般用来配合分解质因数
+MobiusSieve 和 PhiSieve 就是正常的莫比乌斯筛和欧拉函数筛
+
+支持查询质数、判断质数、分解质因数、求欧拉函数、求莫比乌斯函数
+
+支持查询第 k 个质数
+
+支持查询一个区间内质数的个数
+
+支持迭代器访问质数
+*/
 template <std::uint32_t range>
 class EratosthenesSieve {
     using size_type = std::uint32_t;

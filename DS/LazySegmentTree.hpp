@@ -1,6 +1,17 @@
 #pragma once
 #include <bits/stdc++.h>
 
+/*
+懒标记线段树
+模仿 atcoder 板子实现
+重构了一下整个类
+
+支持各种初始化
+
+支持二分
+
+区间均为闭区间，0index
+*/
 template <typename Info, typename Function, auto Mapping, auto Composition, auto op, auto e, auto id>
 class LazySegmentTree {
 private:

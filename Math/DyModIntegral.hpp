@@ -2,6 +2,25 @@
 #include <cstdint>
 #include <concepts>
 
+/*
+动态取模整数类，配合 Barrett 使用
+
+using modint = ModIntegral<std::uint32_t, Barrett32, 0>;
+
+后面有一个 id，用于区分不同的动态模数
+
+运行时设置模数：modint::setmod(mod, true / false); // 默认 false，表示使用扩展欧几里得求逆元
+
+支持取模、取逆、幂运算、比较运算
+
+支持动态设置模数
+
+支持四则运算
+
+支持隐式转换为 bool
+
+支持输入输出
+*/
 template <std::unsigned_integral type, typename Base, std::size_t id>
     requires requires (Base object) {
     object.mod();

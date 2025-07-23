@@ -5,6 +5,13 @@
 #include <ranges>
 #include <type_traits>
 
+/*
+树状数组
+只支持维护可差分的信息
+如 加法， 乘法， 异或
+
+你需要重载 operator +, +=, -, *(只有区间修改需要 倍增) 来实现其他操作，默认是加法
+*/
 template <typename T, bool range = false>
 class BinaryIndexedTree {
 private:

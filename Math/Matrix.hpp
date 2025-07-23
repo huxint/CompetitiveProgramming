@@ -9,6 +9,15 @@
 #include <algorithm>
 #include <initializer_list>
 
+/*
+矩阵类
+支持四则运算、幂运算
+支持单位矩阵
+支持迭代器访问
+支持初始化列表和构造函数
+
+用 (i, j) 访问第 i 行第 j 列, 而不是 []
+*/
 template <typename T, std::size_t row, std::size_t col>
 class Matrix {
 public:

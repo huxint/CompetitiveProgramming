@@ -6,6 +6,10 @@
 #include <cassert>
 #include <algorithm>
 
+/*
+马拉车
+线性求最长回文串长度
+*/
 class Manacher {
 public:
     Manacher() {}

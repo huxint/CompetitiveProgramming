@@ -3,6 +3,11 @@
 #include <concepts>
 #include <limits>
 
+/*
+简单的快速幂
+第一个支持重载了 *= 运算符的任何类
+第二个就是整数取模，加了一些类型的判断，防止整形溢出的错误
+*/
 auto power(auto base, std::size_t exp) {
     decltype(base) res(1);
     for (; exp != 0; exp >>= 1, base *= base) {

@@ -1,6 +1,10 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+
+/*
+离散化数组
+*/
 template <typename T>
 class Discretizer {
 public:

@@ -3,6 +3,15 @@
 #include <array>
 #include <limits>
 
+/*
+线性基
+
+支持插入、查询、枚举、合并
+
+支持求最大值、最小值、第 k 大值
+
+支持求 rank
+*/
 template <std::unsigned_integral T>
 class XorBase {
 private:

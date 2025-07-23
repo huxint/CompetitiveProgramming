@@ -2,6 +2,11 @@
 #include <queue>
 #include <vector>
 
+/*
+拓扑排序
+一般都会默写
+感觉没啥用
+*/
 namespace TopologicalSort {
     class Graph {
     public:

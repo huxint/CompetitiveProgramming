@@ -2,6 +2,10 @@
 #include <vector>
 #include <numeric>
 
+/*
+DSU，并查集
+在基础功能上 支持输出方便debug，支持枚举集合
+*/
 class DisjointSetUnion {
 public:
     DisjointSetUnion(std::size_t n) : _size(n), _total(n) {
