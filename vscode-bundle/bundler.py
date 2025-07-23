@@ -288,6 +288,7 @@ def generate_header(input_file):
     # 生成头部信息
     header = f"""/**
  * @author: {author}
+ * @github: https://github.com/huxint/CompetitiveProgramming
  * @problem: {problem_name}
  * @date: {date_str}
  **/
