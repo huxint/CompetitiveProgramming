@@ -256,21 +256,9 @@ namespace fio {
             return write(str.data(), str.size());
         }
 
-        template <std::signed_integral T>
-        Ostream &operator<<(T value) {
-            return *this << std::make_unsigned_t<T>(value < 0 ? putchar('-'), -value : value);
-        }
-
-        Ostream &operator<<(std::unsigned_integral auto value) {
-            static char _buf[25];
-            std::size_t top = 0;
-            do {
-                _buf[++top] = value % 10;
-            } while (value /= 10);
-            while (top != 0) {
-                putchar(_buf[top--] | 0X30);
-            }
-            return *this;
+        Ostream &operator<<(std::integral auto value) {
+            static char _buf[20];
+            return write(_buf, std::to_chars(_buf, _buf + 20, value).ptr - _buf);
         }
 
         Ostream &operator<<(std::floating_point auto value) {

@@ -7,12 +7,14 @@
 #pragma once
 #include <vector>
 #include <numeric>
+#include <ranges>
+#include <algorithm>
 class DisjointSetUnion {
 public:
-    DisjointSetUnion(std::size_t n) : _size(n), _total(n) {
+    DisjointSetUnion(std::size_t n) : _size(n) {
         parent.resize(n);
         count.assign(n, 1);
-        std::iota(parent.begin(), parent.end(), 0);
+        std::ranges::iota(parent, 0);
     }
 
     std::size_t size() const {
@@ -46,18 +48,18 @@ public:
     }
 
     void for_each(auto &&call) {
-        std::vector<std::size_t> index(_total);
+        std::vector<std::size_t> index(count.size());
         std::vector<std::vector<std::size_t>> groups(size());
-        for (std::size_t i = 0, j = 0; i < _total; ++i) {
-            if (not head(i)) {
-                continue;
-            }
+        std::size_t j = 0;
+        for (std::size_t j = 0; auto i : std::ranges::views::iota(std::size_t(0), count.size()) | std::ranges::views::filter([this](std::size_t x) {
+            return head(x);
+        })) {
             groups[index[i] = j++].reserve(count[i]);
         }
-        for (std::size_t i = 0; i < _total; ++i) {
+        for (std::size_t i = 0; i < count.size(); ++i) {
             groups[index[find(i)]].push_back(i);
         }
-        std::for_each(groups.begin(), groups.end(), std::forward<decltype(call)>(call));
+        std::ranges::for_each(groups, std::forward<decltype(call)>(call));
     }
 
     template <typename Ostream>
@@ -77,7 +79,6 @@ public:
 
 private:
     std::size_t _size;
-    std::size_t _total;
     std::vector<std::size_t> parent;
     std::vector<std::size_t> count;
 };
