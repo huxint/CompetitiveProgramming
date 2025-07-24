@@ -1,3 +1,10 @@
+/**
+ * @brief Manacher算法（马拉车算法）
+ * @details 线性时间内求解字符串中所有位置的最长回文子串长度
+ *          支持奇数和偶数的最长回文半径
+ * @author huxint
+ * @complexity O(n), 其中n为字符串长度
+ */
 #pragma once
 #include <string>
 #include <string_view>
@@ -5,11 +12,6 @@
 #include <cstdint>
 #include <cassert>
 #include <algorithm>
-
-/*
-马拉车
-线性求最长回文串长度
-*/
 class Manacher {
 public:
     Manacher() {}

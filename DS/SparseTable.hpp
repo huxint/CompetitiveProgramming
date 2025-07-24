@@ -1,3 +1,10 @@
+/**
+ * @brief ST表（Sparse Table）
+ * @details 支持RMQ（区间最值查询）等可重复贡献问题的数据结构
+ *          支持多种初始化方式，操作函数需满足可重复贡献性质（如max、min、gcd等）
+ *          使用示例：SparseTable<int, std::ranges::max>、SparseTable<int, std::ranges::min>、SparseTable<int, std::gcd<int, int>>等等
+ * @complexity 预处理: O(n log n), 查询: O(1)
+ */
 #pragma once
 #include <bit>
 #include <vector>
@@ -6,20 +13,6 @@
 #include <utility>
 #include <concepts>
 #include <functional>
-
-/*
-ST 表
-传入 操作函数，确保 2 ^ level >= 题目的最大长度
-
-支持各种初始化
-
-op 支持各种可重复贡献的操作
-
-SparseTable<int, std::ranges::max>;
-SparseTable<int, std::ranges::min>;
-SparseTable<int, std::gcd<int, int>>;
-等等
-*/
 template <typename T, auto op, std::size_t level = 23>
 class SparseTable {
 public:

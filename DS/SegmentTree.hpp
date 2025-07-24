@@ -1,17 +1,11 @@
+/**
+ * @brief 线段树（Segment Tree）
+ * @details 支持单点修改和区间查询的线段树，基于AtCoder库实现并重构
+ *          支持多种初始化方式和二分查找功能，区间均为闭区间，使用0-based索引
+ * @complexity 单点修改/区间查询: O(log n), 二分: O(log n)
+ */
 #pragma once
 #include <bits/stdc++.h>
-
-/*
-线段树
-模仿 atcoder 板子实现
-重构了一下整个类
-
-支持各种初始化
-
-支持二分
-
-区间均为闭区间，0index
-*/
 template <typename Info, auto op, auto e>
 class SegmentTree {
 private:

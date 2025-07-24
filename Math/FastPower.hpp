@@ -1,13 +1,13 @@
+/**
+ * @brief 快速幂算法
+ * @details 提供通用的快速幂实现，支持任何重载了*=运算符的类型
+ *          包含整数取模版本，添加了类型判断以防止整型溢出
+ * @complexity O(log n), 其中n为指数
+ */
 #pragma once
 #include <cstdint>
 #include <concepts>
 #include <limits>
-
-/*
-简单的快速幂
-第一个支持重载了 *= 运算符的任何类
-第二个就是整数取模，加了一些类型的判断，防止整形溢出的错误
-*/
 auto power(auto base, std::size_t exp) {
     decltype(base) res(1);
     for (; exp != 0; exp >>= 1, base *= base) {

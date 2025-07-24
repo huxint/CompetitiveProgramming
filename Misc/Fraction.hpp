@@ -1,3 +1,9 @@
+/**
+ * @brief 分数类
+ * @details 支持精确分数运算，自动化简，支持四则运算和比较运算
+ *          避免浮点数精度问题，适用于需要精确有理数计算的场景
+ * @complexity 基本运算: O(log(min(a,b))), 其中a,b为分子分母
+ */
 #pragma once
 #include <numeric>
 #include <compare>

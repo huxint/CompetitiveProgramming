@@ -1,3 +1,10 @@
+/**
+ * @brief 动态位集类
+ * @details 支持动态大小的位集操作，包括位运算、查找、翻转等功能
+ *          类似于std::bitset但支持运行时确定大小
+ * @author huxint
+ * @complexity 大部分操作: O(n/w), 其中w为机器字长
+ */
 #pragma once
 
 #include <bit>
@@ -9,10 +16,6 @@
 #include <stdexcept>
 #include <algorithm>
 #include <type_traits>
-
-/**
- * @author: huxint
- */
 template <std::unsigned_integral Block>
 class DynamicBitset {
 private:

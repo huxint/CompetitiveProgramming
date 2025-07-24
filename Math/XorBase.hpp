@@ -1,17 +1,13 @@
+/**
+ * @brief 线性基（异或线性基）
+ * @details 用于处理异或相关问题的数据结构，支持插入、查询、枚举、合并等操作
+ *          支持求异或最大值、最小值、第k大值和rank查询
+ * @complexity 插入/查询: O(log U), 其中U为值域大小
+ */
 #pragma once
 #include <bit>
 #include <array>
 #include <limits>
-
-/*
-线性基
-
-支持插入、查询、枚举、合并
-
-支持求最大值、最小值、第 k 大值
-
-支持求 rank
-*/
 template <std::unsigned_integral T>
 class XorBase {
 private:

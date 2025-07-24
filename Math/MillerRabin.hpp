@@ -1,13 +1,15 @@
+/**
+ * @brief Miller-Rabin素性测试算法
+ * @details 高效的概率性素数判断算法，适用于判断大整数是否为素数
+ *          对于64位以内的数具有确定性结果
+ * @author huxint
+ * @complexity O(k log^3 n), 其中k为测试轮数，n为待测数
+ */
 #pragma once
 #include <cstdint>
 #include <concepts>
 #include <limits>
 #include <algorithm>
-
-/*
-高效的质数判断
-就一个功能，判断超级大的数是不是质数
-*/
 template <std::unsigned_integral T>
 constexpr bool MillerRabin(T value) {
     using u32 = std::uint32_t;

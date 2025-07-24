@@ -1,10 +1,12 @@
+/**
+ * @brief 离散化工具类
+ * @details 将连续的值域映射到较小的离散区间，常用于坐标压缩
+ *          支持查询原值对应的离散化位置和离散化位置对应的原值
+ * @complexity 预处理: O(n log n), 查询: O(log n)
+ */
 #pragma once
 #include <vector>
 #include <algorithm>
-
-/*
-离散化数组
-*/
 template <typename T>
 class Discretizer {
 public:

@@ -1,17 +1,12 @@
+/**
+ * @brief 扩展根号类
+ * @details 表示形如 a + b√V 的数，支持四则运算、幂运算、比较运算和输出
+ *          使用示例：Sqrt<5, int> a(1, 2); 表示 1 + 2√5
+ *          可用于计算斐波那契数列等涉及根号的数学问题
+ * @complexity 基本运算: O(1), 幂运算: O(log n)
+ */
 #pragma once
 #include <cstdint>
-
-/*
-扩展根号类
-Sqrt<5, int> a(1, 2);
-表示 1 + 2 sqrt(5)
-
-支持四则运算、幂运算、比较运算
-
-支持输出
-
-我们可以用这个类来计算 斐波那契数列等等
-*/
 template <std::size_t V, typename T>
 class Sqrt {
 public:

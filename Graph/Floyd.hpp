@@ -1,19 +1,11 @@
+/**
+ * @brief Floyd算法（单源最短路的简化版本）
+ * @details 基于Floyd-Warshall思想的单源最短路实现，一般情况下推荐使用Dijkstra
+ *          使用示例：Floyd::Graph<int> adj(n); adj.add_edge(u, v, w); auto res = adj.solve(start, std::numeric_limits<int>::max() / 2);
+ * @complexity O(V^3), 其中V为顶点数
+ */
 #pragma once
 #include <vector>
-
-/*
-一般都用 Dijkstra 了，Floyd 几乎不需要用到
-
-Floyd::Graph<int> adj(5);
-adj.add_edge(0, 1, 1);
-adj.add_edge(0, 2, 2);
-adj.add_edge(1, 2, 3);
-adj.add_edge(1, 3, 4);
-adj.add_edge(2, 3, 5);
-adj.add_edge(3, 4, 6);
-auto res = adj.solve(起点，std::numeric_limits<int>::max());
-res 就是distances数组了
-*/
 namespace Floyd {
     template <typename Group>
     class Graph {

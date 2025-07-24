@@ -1,13 +1,12 @@
+/**
+ * @brief 辛普森积分算法
+ * @details 使用自适应辛普森公式计算函数在指定区间的定积分
+ *          支持误差控制和最大迭代次数限制，防止精度问题导致TLE
+ *          函数f需要接受一个参数x，返回浮点数类型的值
+ * @author huxint
+ */
 #pragma once
 #include <concepts>
-
-/*
-辛普森积分
-求函数 f(x) 在 [l, r] 的积分
-支持误差设置和最大循环次数，防止精度导致的 TLE
-
-函数 f 需要接受一个参数 x，返回一个 T 类型的值，T 必须是浮点数
-*/
 template <std::floating_point T>
 constexpr auto integral(T l, T r, auto &&f, auto eps, std::size_t loop = 30) {
     auto simpson = [&f](auto l, auto r) -> auto {

@@ -1,3 +1,9 @@
+/**
+ * @brief 计时器工具类
+ * @details 提供高精度计时功能，支持单次计时和性能分析
+ *          包含简单计时器和性能分析器，用于代码性能测试
+ * @author huxint
+ */
 #pragma once
 
 #include <chrono>
@@ -7,10 +13,6 @@
 #include <vector>
 #include <map>
 #include <mutex>
-
-/**
- * @author: huxint
- */
 namespace timer {
     class Timer {
     private:

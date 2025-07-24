@@ -1,3 +1,10 @@
+/**
+ * @brief 矩阵类模板
+ * @details 支持矩阵的四则运算、幂运算、单位矩阵构造等操作
+ *          支持迭代器访问、初始化列表构造，使用(i,j)访问第i行第j列元素
+ * @author huxint
+ * @complexity 矩阵乘法: O(n^3), 矩阵幂: O(n^3 log k)
+ */
 #pragma once
 #include <array>
 #include <ranges>
@@ -8,16 +15,6 @@
 #include <stdexcept>
 #include <algorithm>
 #include <initializer_list>
-
-/*
-矩阵类
-支持四则运算、幂运算
-支持单位矩阵
-支持迭代器访问
-支持初始化列表和构造函数
-
-用 (i, j) 访问第 i 行第 j 列, 而不是 []
-*/
 template <typename T, std::size_t row, std::size_t col>
 class Matrix {
 public:

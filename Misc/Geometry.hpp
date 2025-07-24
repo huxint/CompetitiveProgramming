@@ -1,3 +1,8 @@
+/**
+ * @brief 计算几何库
+ * @details 提供点、线段、多边形等几何对象和相关算法
+ *          包含距离计算、面积计算、凸包、点在多边形内判断等功能
+ */
 #pragma once
 #include <bits/stdc++.h>
 

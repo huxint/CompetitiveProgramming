@@ -1,17 +1,15 @@
+/**
+ * @brief 树状数组（Binary Indexed Tree / Fenwick Tree）
+ * @details 支持单点修改和区间查询的数据结构，只支持维护可差分的信息（如加法、乘法、异或）
+ *          支持区间修改模式，需要重载相应的运算符来实现其他操作，默认是加法
+ * @complexity 单点修改/查询: O(log n), 区间修改/查询: O(log n)
+ */
 #pragma once
 #include <bit>
 #include <array>
 #include <vector>
 #include <ranges>
 #include <type_traits>
-
-/*
-树状数组
-只支持维护可差分的信息
-如 加法， 乘法， 异或
-
-你需要重载 operator +, +=, -, *(只有区间修改需要 倍增) 来实现其他操作，默认是加法
-*/
 template <typename T, bool range = false>
 class BinaryIndexedTree {
 private:

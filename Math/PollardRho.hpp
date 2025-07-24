@@ -1,20 +1,15 @@
+/**
+ * @brief Pollard-Rho大整数分解算法
+ * @details 基于Brent优化的Pollard-Rho算法，适用于分解大于1e12的合数
+ *          支持32/64位无符号整数的质因数分解、因子枚举和欧拉函数计算
+ * @complexity O(n^(1/4)), 期望时间复杂度, 实际上远远快于这个复杂度
+ */
 #pragma once
 #include <cstdint>
 #include <concepts>
 #include <limits>
 #include <algorithm>
 #include "MillerRabin.hpp"
-
-/*
-PollardRho 算法用于大整数分解，适用于分解大于 1e12 的合数。
-该实现基于 Brent 优化的 Pollard-Rho 算法，适用于 32/64 位无符号整数。
-
-支持枚举 value 的质因子
-
-支持枚举 value 的因子
-
-支持求 value 的欧拉函数
-*/
 namespace PollardRho {
     using u32 = std::uint32_t;
     using u64 = std::uint64_t;

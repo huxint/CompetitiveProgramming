@@ -1,10 +1,12 @@
+/**
+ * @brief Floyd-Warshall传递闭包算法
+ * @details 使用bitset优化的传递闭包实现，用于判断图中任意两点间的可达性
+ *          适用于稠密图的传递闭包计算
+ * @complexity O(V^3 / w), 其中V为顶点数，w为机器字长
+ */
 #pragma once
 #include <tr2/dynamic_bitset>
 #include <vector>
-
-/*
-bitset 版的传递闭包
-*/
 namespace FloydWarshall {
     /* Floyd Warshall Algorithm 传递闭包 */
     class Graph {

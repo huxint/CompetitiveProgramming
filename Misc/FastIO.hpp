@@ -1,3 +1,9 @@
+/**
+ * @brief 快速输入输出库
+ * @details 提供高效的输入输出操作，支持多种数据类型的快速读写
+ *          包含自定义的输入输出流类，性能优于标准库的cin/cout
+ * @author huxint
+ */
 #pragma once
 #include <ranges>
 #include <string>
@@ -11,10 +17,6 @@
 #include <string_view>
 
 namespace fio {
-    /**
-     * @author: huxint
-     * @time: 2025/3/26
-     **/
     static constexpr std::size_t bufsize = 1 << 20;
     static constexpr std::string_view hexdigits = "0123456789abcdef";
     class Istream {

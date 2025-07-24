@@ -1,13 +1,12 @@
+/**
+ * @brief 匈牙利算法（Hungarian Algorithm）
+ * @details 用于求解二分图最大匹配问题，返回最大匹配数和匹配方案
+ *          max为最大匹配数，left_info和right_info分别为左右两侧的匹配信息
+ * @complexity O(V * E), 其中V为顶点数，E为边数
+ */
 #pragma once
 #include <vector>
 #include <tr2/dynamic_bitset>
-
-/*
-二分图最大匹配
-max 就是最大匹配
-left_info 是左边匹配的信息
-right_info 是右边匹配的信息
-*/
 namespace Hungarian {
     constexpr std::size_t none = -1;
     class Graph {

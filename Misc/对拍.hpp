@@ -1,3 +1,9 @@
+/**
+ * @brief 对拍工具
+ * @details 用于算法正确性验证的对拍工具，支持随机数据生成和多解法比较
+ *          提供随机数生成器和自动化测试框架
+ * @author huxint
+ */
 #include <bits/stdc++.h>
 
 namespace fs = std::filesystem;
