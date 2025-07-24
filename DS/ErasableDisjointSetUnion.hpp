@@ -1,11 +1,12 @@
+/**
+ * @brief 可撤销并查集（Erasable Disjoint Set Union）
+ * @details 支持从集合中移除单个元素的并查集，extract操作将指定点从其所在集合中移除
+ *          适用于需要动态删除元素的场景
+ * @complexity 合并/查询: O(α(n)), 移除: O(α(n))
+ */
 #pragma once
 #include <vector>
 #include <numeric>
-
-/*
-可撤销并查集
-extract将某个点移除
-*/
 class ErasableDisjointSetUnion {
 public:
     ErasableDisjointSetUnion(std::size_t n) : max(n), group(n) {

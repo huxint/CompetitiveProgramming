@@ -1,12 +1,12 @@
+/**
+ * @brief 拓扑排序算法（Topological Sort）
+ * @details 对有向无环图（DAG）进行拓扑排序，返回一个线性序列
+ *          使用Kahn算法实现，基于入度的BFS方法
+ * @complexity O(V + E), 其中V为顶点数，E为边数
+ */
 #pragma once
 #include <queue>
 #include <vector>
-
-/*
-拓扑排序
-一般都会默写
-感觉没啥用
-*/
 namespace TopologicalSort {
     class Graph {
     public:

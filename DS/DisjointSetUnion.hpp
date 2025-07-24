@@ -1,11 +1,12 @@
+/**
+ * @brief 并查集（Disjoint Set Union, DSU）
+ * @details 支持合并集合、查询连通性、获取集合大小等操作
+ *          在基础功能上增加了调试输出和集合枚举功能
+ * @complexity 合并/查询: O(α(n)), 其中α为反阿克曼函数
+ */
 #pragma once
 #include <vector>
 #include <numeric>
-
-/*
-DSU，并查集
-在基础功能上 支持输出方便debug，支持枚举集合
-*/
 class DisjointSetUnion {
 public:
     DisjointSetUnion(std::size_t n) : _size(n), _total(n) {

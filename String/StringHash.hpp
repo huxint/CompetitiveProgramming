@@ -1,3 +1,11 @@
+/**
+ * @brief 字符串哈希算法
+ * @details 多项式滚动哈希实现，支持快速字符串匹配和子串比较
+ *          支持多重哈希以降低冲突概率，可配合MillerRabin生成编译期随机质数模数
+ *          支持字符串和数字容器的哈希计算
+ * @author huxint
+ * @complexity 预处理: O(n), 查询: O(1)
+ */
 #pragma once
 #include <array>
 #include <limits>
@@ -6,16 +14,6 @@
 #include <cstdint>
 #include <algorithm>
 #include <string_view>
-
-/*
-哈希，配合 MillerRabin 可以实现随机编译期质数
-
-也可以手动设置
-
-哈希支持迭代器构造，支持字符串构造
-
-迭代器构造即支持数字容器的哈希
-*/
 template <std::size_t width, std::array<std::uint64_t, width> base, std::array<std::uint64_t, width> modular>
 class StringHash {
 private:

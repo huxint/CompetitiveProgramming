@@ -1,14 +1,15 @@
+/**
+ * @brief 01字典树（Binary Trie）
+ * @details 基于二进制位的字典树，支持插入、删除、计数、最大最小值查询、枚举等操作
+ *          适用于处理整数的位运算相关问题，如异或最大值、异或第k小等
+ * @complexity 插入/删除/查询: O(log U), 其中U为值域大小
+ */
 #pragma once
 #include <array>
 #include <vector>
 #include <cstdint>
 #include <utility>
 #include <algorithm>
-
-/*
-01字典树
-支持插入（多个），移除（多个），计数，最大最小查询，枚举，输出
-*/
 template <std::unsigned_integral Key, typename T = std::size_t, std::size_t width = std::numeric_limits<Key>::digits>
 class BinaryTrie {
 private:

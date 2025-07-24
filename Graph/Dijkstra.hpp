@@ -1,31 +1,18 @@
+/**
+ * @brief Dijkstra最短路算法
+ * @details 支持单源最短路径查询，包括路径记录、路径计数、最短路计数等功能
+ *          可通过重载比较运算符处理复杂的权值类型
+ *          使用示例：
+ *          - Dijkstra::Graph<int> adj(n); adj.add_edge(u, v, w); adj.solve(start, std::numeric_limits<int>::max() / 2);
+ *          - adj.solve<true>(start, std::numeric_limits<int>::max() / 2); // 记录路径
+ *          - adj.solve<false, true>(start, std::numeric_limits<int>::max() / 2); // 计数最短路
+ *          - adj.solve<true, true, modint>(start, std::numeric_limits<int>::max() / 2); // 路径记录+计数（使用取模类）
+ * @complexity O((V + E) log V), 其中V为顶点数，E为边数
+ */
 #pragma once
 #include <queue>
 #include <vector>
 #include <tr2/dynamic_bitset>
-
-/*
-Dijkstra 最短路
-支持路径记录、路径计数、最短路计数
-复杂的信息用 struct 可以自行重载比较运算实现想要的功能
-
-Dijkstra::Graph<int> adj(5);
-adj.add_edge(0, 1, 1);
-adj.add_edge(0, 2, 2);
-adj.add_edge(1, 2, 3);
-adj.add_edge(1, 3, 4);
-adj.add_edge(2, 3, 5);
-adj.add_edge(3, 4, 6);
-
-adj.solve(起点, std::numeric_limits<int>::max());
-
-adj.solve<true>(起点, std::numeric_limits<int>::max());
-
-adj.solve<false, true>(起点, std::numeric_limits<int>::max());
-
-adj.solve<true, true>(起点, std::numeric_limits<int>::max());
-
-adj.solve<true, true, modint>(起点, std::numeric_limits<int>::max()); // 路径计数使用取模类
-*/
 namespace Dijkstra {
     template <typename Group>
     class Graph {

@@ -1,14 +1,16 @@
+/**
+ * @brief 大整数类
+ * @details 支持任意精度整数运算，包括四则运算、比较运算、幂运算等
+ *          使用Karatsuba算法优化乘法，支持字符串输入输出
+ * @author huxint
+ * @complexity 加减法: O(n), 乘法: O(n^1.585)
+ */
 #pragma once
 #include <vector>
 #include <ranges>
 #include <charconv>
 #include <algorithm>
 #include <cstdint>
-
-/**
- * author: huxint
- * time: 2025/4/5
- */
 template <std::size_t width>
     requires(width > 0 and width < 10)
 class BigInteger {

@@ -1,16 +1,12 @@
+/**
+ * @brief Barrett约简算法
+ * @details 用于优化非编译期模数的取模运算，避免除法操作提高性能
+ *          目前只支持32位整数，支持动态设置模数和模乘法运算
+ * @complexity 取模运算: O(1)
+ */
 #pragma once
 #include <algorithm>
 #include <cstdint>
-
-/*
-Barrett 算法，用于优化非编译期模数的取模运算
-
-目前只支持 32 位
-
-支持设置模数
-
-支持乘法
-*/
 class Barrett32 {
 private:
     using u32 = std::uint32_t;

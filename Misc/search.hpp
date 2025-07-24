@@ -1,3 +1,9 @@
+/**
+ * @brief 搜索算法集合
+ * @details 提供二分搜索和三分搜索的通用实现
+ *          支持整数和浮点数的二分搜索，以及浮点数的三分搜索（求极值）
+ * @complexity 二分搜索: O(log n), 三分搜索: O(log n)
+ */
 #pragma once
 #include <bits/stdc++.h>
 
