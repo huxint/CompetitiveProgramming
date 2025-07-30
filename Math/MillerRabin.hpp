@@ -27,7 +27,7 @@ constexpr bool MillerRabin(T value) {
     u32 count = std::countr_zero(value - 1);
     T u = (value - 1) >> count, inverse = T(2) - value;
 
-    for (u32 i = digits <= 64; i < 5; ++i) {
+    for (u32 i = digits < 64; i < 5; ++i) {
         inverse *= T(2) - value * inverse;
     }
 
@@ -39,7 +39,7 @@ constexpr bool MillerRabin(T value) {
     const T one = -value % value, value_inverse = -long_size(value) % value, value_reduce_one = value - one;
 
     auto prime_test = [&](std::initializer_list<T> test_base) -> bool {
-        return std::all_of(test_base.begin(), test_base.end(), [&](auto base) -> bool {
+        return std::ranges::all_of(test_base, [&](auto base) -> bool {
             if (base >= value) {
                 return true;
             }
