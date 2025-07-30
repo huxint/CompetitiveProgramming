@@ -49,7 +49,7 @@ namespace PollardRho {
         constexpr auto digits = std::numeric_limits<size>::digits;
         using next_size = std::conditional_t<(digits < 64), u64, u128>;
         size inverse = size(2) - value;
-        for (u32 i = digits <= 64; i < 5; ++i) {
+        for (u32 i = digits < 64; i < 5; ++i) {
             inverse *= size(2) - value * inverse;
         }
         auto multiply = [&value, &inverse](size lhs, size rhs) -> size {
