@@ -32,14 +32,14 @@ template/
 
 | 文件 | 算法 | 复杂度 | 用途 |
 |------|------|--------|------|
-| `SegmentTree.hpp` | 线段树 | O(log n) | 区间查询/单点修改 |
-| `LazySegmentTree.hpp` | 懒标记线段树 | O(log n) | 区间修改/查询 |
-| `BinaryIndexedTree.hpp` | 树状数组 | O(log n) | 前缀和查询 |
-| `DisjointSetUnion.hpp` | 并查集 | O(α(n)) | 连通性查询 |
-| `SparseTable.hpp` | ST表 | O(1) | 静态RMQ |
-| `BinaryTrie.hpp` | 01字典树 | O(log V) | 异或最值 |
-| `Discretizer.hpp` | 离散化 | O(n log n) | 坐标压缩 |
-| `ErasableDisjointSetUnion.hpp` | 可撤销并查集 | O(log n) | 支持撤销 |
+| `SegmentTree.hpp` | 线段树 | $\mathcal{O}(\log n)$ | 区间查询/单点修改 |
+| `LazySegmentTree.hpp` | 懒标记线段树 | $\mathcal{O}(\log n)$ | 区间修改/查询 |
+| `BinaryIndexedTree.hpp` | 树状数组 | $\mathcal{O}(\log n)$ | 前缀和查询 |
+| `DisjointSetUnion.hpp` | 并查集 | $\mathcal{O}(\alpha(n))$ | 连通性查询 |
+| `SparseTable.hpp` | ST表 | $\mathcal{O}(1)$ | 静态RMQ |
+| `BinaryTrie.hpp` | 01字典树 | $\mathcal{O}(\log V)$ | 异或最值 |
+| `Discretizer.hpp` | 离散化 | $\mathcal{O}(n \log n)$ | 坐标压缩 |
+| `ErasableDisjointSetUnion.hpp` | 可撤销并查集 | $\mathcal{O}(\log n)$ | 支持撤销 |
 
 </details>
 
@@ -48,10 +48,10 @@ template/
 
 | 文件 | 算法 | 复杂度 | 用途 |
 |------|------|--------|------|
-| `Dijkstra.hpp` | Dijkstra | O((V+E) log V) | 单源最短路 |
-| `FloydWarshall.hpp` | Floyd | O(V³) | 全源最短路 |
-| `TopologicalSort.hpp` | 拓扑排序 | O(V+E) | DAG排序 |
-| `Hungarian.hpp` | 匈牙利算法 | O(V³) | 二分图匹配 |
+| `Dijkstra.hpp` | Dijkstra | $\mathcal{O}((V+E) \log V)$ | 单源最短路 |
+| `FloydWarshall.hpp` | Floyd | $\mathcal{O}(V^3)$ | 全源最短路 |
+| `TopologicalSort.hpp` | 拓扑排序 | $\mathcal{O}(V+E)$ | DAG排序 |
+| `Hungarian.hpp` | 匈牙利算法 | $\mathcal{O}(V^3)$ | 二分图匹配 |
 
 </details>
 
@@ -60,14 +60,14 @@ template/
 
 | 文件 | 算法 | 复杂度 | 用途 |
 |------|------|--------|------|
-| `Sieve.hpp` | 各种筛法 | O(n) | 质数/欧拉函数 |
-| `FastPower.hpp` | 快速幂 | O(log n) | 模幂运算 |
-| `MillerRabin.hpp` | 素数测试 | O(k log³ n) | 判断素数 |
-| `PollardRho.hpp` | 大数分解 | O(n^1/4) | 质因数分解 |
-| `Matrix.hpp` | 矩阵快速幂 | O(n³ log k) | 矩阵运算 |
-| `XorBase.hpp` | 异或线性基 | O(log V) | 异或极值 |
-| `ModIntegral.hpp` | 模运算 | O(1) | 自动取模 |
-| `Combination.hpp` | 组合数 | O(1) | 组合计数 |
+| `Sieve.hpp` | 各种筛法 | $\mathcal{O}(n)$ | 质数/欧拉函数 |
+| `FastPower.hpp` | 快速幂 | $\mathcal{O}(\log n)$ | 模幂运算 |
+| `MillerRabin.hpp` | 素数测试 | $\mathcal{O}(k \log^3 n)$ | 判断素数 |
+| `PollardRho.hpp` | 大数分解 | $\mathcal{O}(n^{\frac{1}{4}})$ | 质因数分解 |
+| `Matrix.hpp` | 矩阵快速幂 | $\mathcal{O}(n^3 \log k)$ | 矩阵运算 |
+| `XorBase.hpp` | 异或线性基 | $\mathcal{O}(\log V)$ | 异或极值 |
+| `ModIntegral.hpp` | 模运算 | $\mathcal{O}(1)$ | 自动取模 |
+| `Combination.hpp` | 组合数 | $\mathcal{O}(1)$ | 组合计数 |
 
 </details>
 
@@ -76,8 +76,8 @@ template/
 
 | 文件 | 算法 | 复杂度 | 用途 |
 |------|------|--------|------|
-| `StringHash.hpp` | 字符串哈希 | O(n) | 快速字符串比较 |
-| `Manacher.hpp` | Manacher | O(n) | 回文串检测 |
+| `StringHash.hpp` | 字符串哈希 | $\mathcal{O}(n)$ | 快速字符串比较 |
+| `Manacher.hpp` | Manacher | $\mathcal{O}(n)$ | 回文串检测 |
 
 </details>
 
