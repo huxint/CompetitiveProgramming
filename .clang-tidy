@@ -1,0 +1,15 @@
+Checks: >
+  bugprone-*,
+  modernize-*,
+  readability-*,
+  performance-*,
+  portability-*,
+  -modernize-use-trailing-return-type,
+  -performance-avoid-endl,
+  -readability-identifier-length,
+  -readability-math-missing-parentheses
+
+FormatStyle: file
+CheckOptions:
+  - key: modernize-use-nullptr.ReplacementFunction
+    value: 'nullptr'
