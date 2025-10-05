@@ -4,6 +4,8 @@ Checks: >
   readability-*,
   performance-*,
   portability-*,
+  -readability-magic-numbers,
+  -bugprone-easily-swappable-parameters,
   -modernize-use-trailing-return-type,
   -performance-avoid-endl,
   -readability-identifier-length,
